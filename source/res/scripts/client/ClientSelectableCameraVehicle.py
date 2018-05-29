@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ClientSelectableCameraVehicle.py
+from collections import namedtuple
 import Math
 import BigWorld
 from ClientSelectableCameraObject import ClientSelectableCameraObject
@@ -7,6 +8,7 @@ from gui.hangar_vehicle_appearance import HangarVehicleAppearance
 from vehicle_systems.tankStructure import ModelStates
 from vehicle_systems.tankStructure import TankPartIndexes
 from gui.ClientHangarSpace import hangarCFG
+_VehicleTransformParams = namedtuple('_VehicleTransformParams', ('targetPos', 'rotateYPR', 'shadowModelYOffset'))
 
 class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
     appearance = property(lambda self: self.__vAppearance)
@@ -19,7 +21,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         self.__fakeShadowModel = None
         self.__shadowModelFashion = None
         self.__isVehicleLoaded = False
-        self.__vAppearance = HangarVehicleAppearance(self.spaceID, self)
+        self.__vehicleTransform = None
         return
 
     def prerequisites(self):
@@ -52,7 +54,9 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         if typeDescriptor is not None:
             self.typeDescriptor = typeDescriptor
         self.__onLoadedCallback = callback
-        if self.typeDescriptor is not None and self.__vAppearance is not None:
+        if self.typeDescriptor is not None:
+            if self.__vAppearance is None:
+                self.__vAppearance = self._createAppearance()
             self.__vAppearance.recreate(self.typeDescriptor, state, self._onVehicleLoaded)
         self.__updateFakeShadowAccordingToAppearance()
         return
@@ -62,13 +66,23 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
             self.__vAppearance.remove()
         self.__updateFakeShadowAccordingToAppearance()
 
+    def updateVehicleCustomization(self, outfit):
+        self.appearance.updateCustomization(outfit, self._onVehicleRefreshed)
+
+    def _createAppearance(self):
+        return HangarVehicleAppearance(self.spaceID, self)
+
     def _onVehicleLoaded(self):
         self.__updateFakeShadowAccordingToAppearance()
         self.__isVehicleLoaded = True
         if self.__onLoadedCallback is not None:
             self.__onLoadedCallback()
             self.__onLoadedCallback = None
+        self.__restoreTransform()
         return
+
+    def _onVehicleRefreshed(self):
+        self.__restoreTransform()
 
     def _getModelHeight(self):
         boundsTurret = Math.Matrix(self.model.getBoundsForPart(TankPartIndexes.TURRET))
@@ -90,15 +104,23 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         else:
             self.targetCaps = [0]
 
+    def _setVehicleModelTransform(self, targetPos, rotateYPR, shadowModelYOffset=None):
+        self.__vehicleTransform = _VehicleTransformParams(targetPos, rotateYPR, shadowModelYOffset)
+        m = Math.Matrix()
+        m.setRotateYPR(rotateYPR)
+        m.translation = Math.Vector3(targetPos)
+        self.model.matrix = m
+        self.__setFakeShadowModelTransform(targetPos, rotateYPR[0], shadowModelYOffset)
+
+    def _resetVehicleModelTransform(self):
+        self.__vehicleTransform = None
+        return
+
     def __createFakeShadow(self, model):
-        cfg = hangarCFG()
         if self.__fakeShadowModel is None:
             self.__fakeShadowModel = model
             self.__shadowModelFashion = BigWorld.WGTextureFashion()
             BigWorld.addModel(self.__fakeShadowModel, self.spaceID)
-            shadowModelYOffset = cfg['shadow_forward_y_offset'] if BigWorld.getGraphicsSetting('RENDER_PIPELINE') == 1 else cfg['shadow_deferred_y_offset']
-            self.__fakeShadowModel.position = Math.Vector3(self.position.x, self.position.y + shadowModelYOffset, self.position.z)
-            self.__fakeShadowModel.yaw = self.yaw
             self.__fakeShadowModel.fashion = self.__shadowModelFashion
         self.__updateFakeShadowAccordingToAppearance()
         return
@@ -115,4 +137,23 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
                 shadowMapTexFileName = cfg['shadow_empty_texture_name']
             if shadowMapTexFileName:
                 self.__shadowModelFashion.setTexture(shadowMapTexFileName, 'diffuseMap')
+            self.__setFakeShadowModelTransform(self.position, self.yaw)
+            return
+
+    def __setFakeShadowModelTransform(self, position, yaw, shadowModelYOffset=None):
+        if self.__fakeShadowModel is None:
+            return
+        else:
+            if shadowModelYOffset is None:
+                cfg = hangarCFG()
+                shadowModelYOffset = cfg['shadow_forward_y_offset'] if BigWorld.getGraphicsSetting('RENDER_PIPELINE') == 1 else cfg['shadow_deferred_y_offset']
+            self.__fakeShadowModel.position = Math.Vector3(position.x, position.y + shadowModelYOffset, position.z)
+            self.__fakeShadowModel.yaw = yaw
+            return
+
+    def __restoreTransform(self):
+        if self.__vehicleTransform is None:
+            return
+        else:
+            self._setVehicleModelTransform(self.__vehicleTransform.targetPos, self.__vehicleTransform.rotateYPR, self.__vehicleTransform.shadowModelYOffset)
             return
