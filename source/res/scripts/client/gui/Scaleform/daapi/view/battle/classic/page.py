@@ -92,7 +92,13 @@ class ClassicPage(SharedPage):
                     self._fsToggling.clear()
                 if self._isInPostmortem:
                     self.as_setPostmortemTipsVisibleS(not isShown)
+                    if self.__hideDamageLogPanel():
+                        self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL})
             return
+
+    def _handleHideSettingsTip(self, _):
+        super(ClassicPage, self)._handleHideSettingsTip(_)
+        self._fsToggling.discard(BATTLE_VIEW_ALIASES.COLOR_SETTINGS_TIP_PANEL)
 
     def _handleRadialMenuCmd(self, event):
         isDown = event.ctx['isDown']
@@ -132,3 +138,7 @@ class ClassicPage(SharedPage):
             self._setComponentsVisibility(hidden=components)
         else:
             self._setComponentsVisibility(visible=components)
+
+    def __hideDamageLogPanel(self):
+        damageLogPanel = self.getComponent(BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL)
+        return damageLogPanel.isSwitchToVehicle()

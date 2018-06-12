@@ -532,9 +532,9 @@
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	425	</power>
-      <weight>	560	</weight>
-      <maxHealth>	104	</maxHealth>
-      <maxRegenHealth>	52	</maxRegenHealth>
+      <weight>	2449	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	359	</rpm_min>

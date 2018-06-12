@@ -896,7 +896,7 @@
           <rayEnd>	1.04229 0.137188 -0.0164372	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.689	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
@@ -1023,4 +1023,7 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.960784	</alpha>
   </emblems>
+  <customization>
+    <customizableVehicleAreas>	CHASSIS HULL TURRET GUN	</customizableVehicleAreas>
+  </customization>
 </It10_P43_bis.xml>

@@ -28,6 +28,7 @@ from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IBrowserController, IRankedBattlesController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
+from skeletons.gui.customization import ICustomizationService
 
 class _ActionHandler(object):
 
@@ -522,6 +523,22 @@ class SecurityLinkHandler(_ActionHandler):
         g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.SECURITY_SETTINGS))
 
 
+class OpenCustomizationHandler(_ActionHandler):
+    service = dependency.descriptor(ICustomizationService)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(OpenCustomizationHandler, self).handleAction(model, entityID, action)
+        self.service.showCustomization()
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -543,7 +560,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _ShowClanSettingsFromInvitesHandler,
  _AcceptClanInviteHandler,
  _DeclineClanInviteHandler,
- _OpenEventBoardsHandler)
+ _OpenEventBoardsHandler,
+ OpenCustomizationHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

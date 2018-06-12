@@ -22,6 +22,7 @@ IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
 IS_CHINA = CURRENT_REALM == 'CN'
 IS_KOREA = CURRENT_REALM == 'KR'
 IS_SINGAPORE = CURRENT_REALM == 'ASIA'
+IS_NORTH_AMERICA = CURRENT_REALM == 'NA'
 IS_SANDBOX = CURRENT_REALM == 'SB'
 IS_QUALIFIERS_ENABLED = False
 REALMS = frozenset(['RU',
@@ -640,6 +641,7 @@ class ACCOUNT_ATTR:
     TUTORIAL_COMPLETED = 17179869184L
     IGR_BASE = 34359738368L
     IGR_PREMIUM = 68719476736L
+    SUSPENDED = 137438953472L
 
 
 class RESTRICTION_TYPE:
@@ -899,6 +901,7 @@ class EVENT_TYPE:
     MOTIVE_QUEST = 12
     RANKED_QUEST = 13
     ELEN_QUEST = 14
+    HANGAR_QUEST = 15
     NAME_TO_TYPE = {'battleQuest': BATTLE_QUEST,
      'tokenQuest': TOKEN_QUEST,
      'personalQuest': PERSONAL_QUEST,
@@ -908,7 +911,8 @@ class EVENT_TYPE:
      'tutorial': TUTORIAL,
      'motiveQuest': MOTIVE_QUEST,
      'rankedQuest': RANKED_QUEST,
-     'elenQuest': ELEN_QUEST}
+     'elenQuest': ELEN_QUEST,
+     'hangarQuest': HANGAR_QUEST}
     TYPE_TO_NAME = dict(zip(NAME_TO_TYPE.values(), NAME_TO_TYPE.keys()))
     QUEST_RANGE = (BATTLE_QUEST,
      TOKEN_QUEST,
@@ -918,7 +922,8 @@ class EVENT_TYPE:
      PERSONAL_MISSION,
      GROUP,
      MOTIVE_QUEST,
-     RANKED_QUEST)
+     RANKED_QUEST,
+     HANGAR_QUEST)
     LIKE_BATTLE_QUESTS = (BATTLE_QUEST,
      PERSONAL_QUEST,
      POTAPOV_QUEST,
@@ -1140,6 +1145,7 @@ class AUTO_MAINTENANCE_RESULT:
     NOT_PERFORMED = 2
     DISABLED_OPTION = 3
     NO_WALLET_SESSION = 4
+    RENT_IS_OVER = 5
 
 
 class REQUEST_COOLDOWN:
@@ -1367,7 +1373,11 @@ class USER_SERVER_SETTINGS:
     SNIPER_AIM_2 = 47
     SNIPER_AIM_3 = 48
     SNIPER_AIM_4 = 64
-    _ALL = (HIDE_MARKS_ON_GUN, EULA_VERSION, GAME_EXTENDED)
+    LINKEDSET_QUESTS = 89
+    _ALL = (HIDE_MARKS_ON_GUN,
+     EULA_VERSION,
+     GAME_EXTENDED,
+     LINKEDSET_QUESTS)
 
     @classmethod
     def isBattleInvitesForbidden(cls, settings):
@@ -1460,7 +1470,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  84: 'feedback battle events',
  85: 'feedback border map',
  86: 'ui storage, used for preserving first entry flags etc',
- USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN: 'Hide marks on gun'}
+ USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN: 'Hide marks on gun',
+ USER_SERVER_SETTINGS.LINKEDSET_QUESTS: 'linkedset quests show reward info'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -1581,9 +1592,6 @@ class CustomizationInvData(object):
     ITEMS = 1
     OUTFITS = 2
 
-
-C11N_MAX_REGION_NUM = 3
-C11N_MASK_REGION = 2
 
 class EVENT_CLIENT_DATA:
     ACTION = 1

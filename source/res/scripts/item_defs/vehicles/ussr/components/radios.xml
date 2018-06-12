@@ -31,6 +31,7 @@
     <RTY_RCEHb>	31	</RTY_RCEHb>
     <N19_Marka_II>	32	</N19_Marka_II>
     <_10RT_26E>	34	</_10RT_26E>
+    <_10RK_W>	35	</_10RK_W>
     <Radio_01_KV>	200	</Radio_01_KV>
     <Radio_T-50-2>	201	</Radio_T-50-2>
     <Observer>	202	</Observer>
@@ -38,7 +39,6 @@
     <Alarm_flags_bot>	207	</Alarm_flags_bot>
     <_71-TK-1_bot>	209	</_71-TK-1_bot>
     <R123_fallout>	208	</R123_fallout>
-    <R113_FL>	60000	</R113_FL>
     <_10RK_IGR>	60001	</_10RK_IGR>
     <_12RT_IGR>	60002	</_12RT_IGR>
     <R113_IGR>	60003	</R113_IGR>
@@ -296,6 +296,18 @@
       <maxRegenHealth>	125	</maxRegenHealth>
       <repairCost>	1.5	</repairCost>
     </_10RK>
+    <_10RK_W>
+      <userString>	#ussr_vehicles:_10RK_W	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	18600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	440	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_10RK_W>
     <_12RT>
       <userString>	#ussr_vehicles:_12RT	</userString>
       <tags></tags>
@@ -616,17 +628,5 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </_10RK-26_IGR>
-    <R113_FL>
-      <userString>	#ussr_vehicles:R113_FL	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R113_FL>
   </shared>
 </radios.xml>

@@ -83,9 +83,9 @@
     <Wright_Continental_R-975EC2L>	105	</Wright_Continental_R-975EC2L>
     <Wright_Continental_R-975C1L>	106	</Wright_Continental_R-975C1L>
     <Continental_AOI-1195-5A>	107	</Continental_AOI-1195-5A>
+    <Ford_GAF_500>	108	</Ford_GAF_500>
     <Ford_GAN_T23>	1000	</Ford_GAN_T23>
     <Development_Engine>	65535	</Development_Engine>
-    <Continental_AV-1790-3_FL>	60000	</Continental_AV-1790-3_FL>
     <Continental_AOI-628-2_IGR>	60001	</Continental_AOI-628-2_IGR>
     <Continental_AOSI-895-5_IGR>	60002	</Continental_AOSI-895-5_IGR>
     <Continental_AV-1790-3A1_IGR>	60003	</Continental_AV-1790-3A1_IGR>
@@ -609,6 +609,23 @@
       <rpm_min>	293	</rpm_min>
       <rpm_max>	2861	</rpm_max>
     </Ford_GAN_T>
+    <Ford_GAF_500>
+      <userString>	#usa_vehicles:Ford_GAF_500	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	641	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
+    </Ford_GAF_500>
     <Cuiberson_T-10204>
       <userString>	#usa_vehicles:Cuiberson_T-10204	</userString>
       <shortUserString>	#usa_vehicles:Cuiberson_T-10204_short	</shortUserString>
@@ -1761,23 +1778,5 @@
       <rpm_min>	416	</rpm_min>
       <rpm_max>	2848	</rpm_max>
     </Continental_AV-1790-7B_IGR>
-    <Continental_AV-1790-3_FL>
-      <userString>	#usa_vehicles:Continental_AV-1790-3_FL	</userString>
-      <shortUserString>	#usa_vehicles:Continental_AV-1790-3_FL_short	</shortUserString>
-      <tags>	gasoline	</tags>
-      <level>	8	</level>
-      <price>	59000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	800	</power>
-      <weight>	569	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	429	</rpm_min>
-      <rpm_max>	2817	</rpm_max>
-    </Continental_AV-1790-3_FL>
   </shared>
 </engines.xml>

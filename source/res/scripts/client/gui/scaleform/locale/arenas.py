@@ -113,3 +113,5 @@ class ARENAS(object):
     TYPE_EPIC_DESCRIPTION2 = '#arenas:type/epic/description2'
     C_03_CAMPANIA_BIG_NAME = '#arenas:03_campania_big/name'
     C_03_CAMPANIA_BIG_DESCRIPTION = '#arenas:03_campania_big/description'
+    C_217_ER_ALASKA_NAME = '#arenas:217_er_alaska/name'
+    C_217_ER_ALASKA_DESCRIPTION = '#arenas:217_er_alaska/description'

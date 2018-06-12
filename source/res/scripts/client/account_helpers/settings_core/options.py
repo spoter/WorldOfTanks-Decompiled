@@ -2351,24 +2351,20 @@ class InterfaceScaleSetting(UserPrefsFloatSetting):
 
 
 class GraphicsQualityNote(SettingAbstract):
-    note = '{0}{1}  {2}{3}'.format("<font face='$FieldFont' size='13' color='#595950'>", i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD), icons.info(), '</font>')
-    _GRAPHICS_QUALITY_TYPES = {CONTENT_TYPE.SD_TEXTURES: note,
-     CONTENT_TYPE.TUTORIAL: note,
-     CONTENT_TYPE.SANDBOX: note}
+    _GRAPHICS_QUALITY_TYPES = {CONTENT_TYPE.SD_TEXTURES, CONTENT_TYPE.TUTORIAL, CONTENT_TYPE.SANDBOX}
 
     def _get(self):
-        return self._GRAPHICS_QUALITY_TYPES.get(ResMgr.activeContentType(), '')
+        return '{0}{1}  {2}{3}'.format("<font face='$FieldFont' size='13' color='#595950'>", i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD), icons.info(), '</font>') if ResMgr.activeContentType() in self._GRAPHICS_QUALITY_TYPES else ''
 
     def _set(self, value):
         pass
 
 
 class GraphicsHigtQualityNote(SettingAbstract):
-    note = '{0}{1}  {2}{3}'.format("<font face='$FieldFont' size='13' color='#595950'>", i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD), icons.alert(), '</font>')
-    _GRAPHICS_QUALITY_TYPES = {CONTENT_TYPE.SD_TEXTURES: note}
+    _GRAPHICS_QUALITY_TYPES = {CONTENT_TYPE.SD_TEXTURES}
 
     def _get(self):
-        return self._GRAPHICS_QUALITY_TYPES.get(ResMgr.activeContentType(), '')
+        return '{0}{1}  {2}{3}'.format("<font face='$FieldFont' size='13' color='#595950'>", i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD), icons.alert(), '</font>') if ResMgr.activeContentType() in self._GRAPHICS_QUALITY_TYPES else ''
 
     def _set(self, value):
         pass
@@ -2580,3 +2576,24 @@ class BattleBorderMapType(GroupSetting):
 
     def getDefaultValue(self):
         return self.TYPE_WALL
+
+
+class LoginServerSelectionSetting(PreferencesSetting):
+
+    def __init__(self, key):
+        super(LoginServerSelectionSetting, self).__init__()
+        self.__key = key
+        self.__value = Settings.g_instance.userPrefs.readBool(self.__key, True)
+
+    def _savePrefsCallback(self, _):
+        Settings.g_instance.userPrefs.writeBool(self.__key, self.__value)
+
+    def _readPrefsCallback(self, key, value):
+        if key == self.__key:
+            self.__value = value
+
+    def _set(self, value):
+        self.__value = value
+
+    def _get(self):
+        return self.__value

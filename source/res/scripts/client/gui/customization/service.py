@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization/service.py
+import math
+import logging
 import BigWorld
 import Event
 from CurrentVehicle import g_currentVehicle
 from helpers import dependency
 from gui import SystemMessages
+from gui.customization.context import CustomizationContext
 from gui.customization.shared import C11N_ITEM_TYPE_MAP, HighlightingMode, MODE_TO_C11N_TYPE
-from gui.shared import g_eventBus, events
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE, ItemsCollection
 from gui.shared.gui_items.customization.c11n_items import Customization, Style
 from gui.shared.gui_items.customization.outfit import Outfit
@@ -14,12 +17,15 @@ from gui.shared.gui_items.processors.common import OutfitApplier, StyleApplier, 
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.decorators import process
 from gui.shared.utils.requesters import REQ_CRITERIA, RequestCriteria
-from gui.shared.utils.HangarSpace import g_hangarSpace
 from items.vehicles import makeIntCompactDescrByID
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from skeletons.gui.shared.utils import IHangarSpace
 from items.components.c11n_constants import SeasonType
+from vehicle_systems.stricted_loading import makeCallbackWeak
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+_logger = logging.getLogger(__name__)
 
 class _ServiceItemShopMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -54,16 +60,20 @@ class _ServiceItemShopMixin(object):
         intCD = makeIntCompactDescrByID('customizationItem', C11N_ITEM_TYPE_MAP.get(itemTypeID), itemID)
         return self.itemsCache.items.getItemByCD(intCD)
 
+    def getItemByCD(self, itemCD):
+        return self.itemsCache.items.getItemByCD(itemCD)
+
 
 class _ServiceHelpersMixin(object):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
     itemsCache = dependency.descriptor(IItemsCache)
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def getEmptyOutfit(self):
         return self.itemsFactory.createOutfit()
 
     def tryOnOutfit(self, outfit):
-        g_hangarSpace.updateVehicleOutfit(outfit)
+        self.hangarSpace.updateVehicleOutfit(outfit)
 
     def getOutfit(self, season):
         return g_currentVehicle.item.getOutfit(season)
@@ -105,6 +115,8 @@ class _ServiceHelpersMixin(object):
 
 
 class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomizationService):
+    hangarSpace = dependency.descriptor(IHangarSpace)
+    __FADE_OUT_DELAY = 0.15
 
     def __init__(self):
         super(CustomizationService, self).__init__()
@@ -115,35 +127,64 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self._needHelperRestart = False
         self._isOver3dScene = False
         self.onRegionHighlighted = Event.Event(self._eventsManager)
-        self.onRemoveItems = Event.Event(self._eventsManager)
-        self.onCarouselFilter = Event.Event(self._eventsManager)
         self.onOutfitChanged = Event.Event(self._eventsManager)
-        self.onPropertySheetShow = Event.Event(self._eventsManager)
+        self.__customizationCtx = None
+        self._suspendHighlighterCallbackID = None
+        self._isDraggingInProcess = False
+        self._notHandleHighlighterEvent = False
+        self.__showCustomizationCallbackId = None
         return
 
     def init(self):
         g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
         g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_CURSOR_DRAGGING, self.__onNotifyCursorDragging)
-        g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, self.__onNotifySpaceMoved)
         g_currentVehicle.onChangeStarted += self.__onVehicleEntityChange
-        g_hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
-        g_hangarSpace.onSpaceCreate += self.__onSpaceCreate
+        self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
+        self.hangarSpace.onSpaceCreate += self.__onSpaceCreate
         self._isOver3dScene = False
+        self._isDraggingInProcess = False
+        self._notHandleHighlighterEvent = False
 
     def fini(self):
         g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
         g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_CURSOR_DRAGGING, self.__onNotifyCursorDragging)
-        g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, self.__onNotifySpaceMoved)
         g_currentVehicle.onChangeStarted -= self.__onVehicleEntityChange
-        g_hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
-        g_hangarSpace.onSpaceCreate -= self.__onSpaceCreate
+        self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
+        self.hangarSpace.onSpaceCreate -= self.__onSpaceCreate
         self.stopHighlighter()
         self._eventsManager.clear()
+        self.__cleanupSuspendHighlighterCallback()
+        if self.__showCustomizationCallbackId is not None:
+            BigWorld.cancelCallback(self.__showCustomizationCallbackId)
+            self.__showCustomizationCallbackId = None
+        return
+
+    def showCustomization(self):
+        if not g_currentVehicle.hangarSpace.spaceInited or not g_currentVehicle.hangarSpace.isModelLoaded:
+            _logger.warning('Space or vehicle is not presented, could not show customization view, return')
+            return
+        else:
+            if self.__showCustomizationCallbackId is None:
+                self.moveHangarVehicleToCustomizationRoom()
+                self.__showCustomizationCallbackId = BigWorld.callback(0.0, self.__showCustomization)
+            return
+
+    def getCtx(self):
+        if not self.__customizationCtx:
+            self.__customizationCtx = CustomizationContext()
+            self.__customizationCtx.init()
+        return self.__customizationCtx
+
+    def destroyCtx(self):
+        if self.__customizationCtx:
+            self.__customizationCtx.fini()
+        self.__customizationCtx = None
+        return
 
     def startHighlighter(self, mode=HighlightingMode.PAINT_REGIONS):
         self._mode = mode
         isLoaded = False
-        entity = g_hangarSpace.getVehicleEntity()
+        entity = self.hangarSpace.getVehicleEntity()
         if entity and entity.appearance:
             entity.appearance.loadState.subscribe(self.resumeHighlighter, self.suspendHighlighter)
             isLoaded = entity.appearance.isLoaded()
@@ -153,10 +194,10 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         if self._helper:
             self._helper.setSelectionMode(self._mode)
         else:
-            self._helper = BigWorld.PyCustomizationHelper(entity, self._mode, self._isOver3dScene, self.__onRegionHighlighted)
+            self._helper = BigWorld.PyCustomizationHelper(entity.model, self._mode, self._isOver3dScene, self.__onRegionHighlighted)
 
     def stopHighlighter(self):
-        entity = g_hangarSpace.getVehicleEntity()
+        entity = self.hangarSpace.getVehicleEntity()
         if entity and entity.appearance:
             entity.appearance.loadState.unsubscribe(self.resumeHighlighter, self.suspendHighlighter)
         self._helper = None
@@ -182,7 +223,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         return self._mode
 
     def getPointForRegionLeaderLine(self, areaId):
-        return g_hangarSpace.getCentralPointForArea(areaId)
+        return self.hangarSpace.getCentralPointForArea(areaId)
 
     def getPointForAnchorLeaderLine(self, areaId, slotId, regionId):
         anchorPos = None
@@ -208,10 +249,29 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         if self._helper:
             self._helper.setHighlightingEnabled(value)
 
+    def resetHighlighting(self):
+        if self._helper:
+            self._helper.resetHighlighting()
+
     def getHightlighter(self):
         return self._helper
 
+    def moveHangarVehicleToCustomizationRoom(self):
+        from gui.ClientHangarSpace import customizationHangarCFG
+        cfg = customizationHangarCFG()
+        targetPos = cfg['v_start_pos']
+        yaw = math.radians(cfg['v_start_angles'][0])
+        pitch = math.radians(cfg['v_start_angles'][1])
+        roll = math.radians(cfg['v_start_angles'][2])
+        shadowYOffset = cfg['shadow_forward_y_offset'] if BigWorld.getGraphicsSetting('RENDER_PIPELINE') == 1 else cfg['shadow_deferred_y_offset']
+        g_eventBus.handleEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.CHANGE_VEHICLE_MODEL_TRANSFORM, ctx={'targetPos': targetPos,
+         'rotateYPR': (yaw, pitch, roll),
+         'shadowYOffset': shadowYOffset}), scope=EVENT_BUS_SCOPE.LOBBY)
+
     def __onRegionHighlighted(self, args):
+        if self._notHandleHighlighterEvent:
+            self._notHandleHighlighterEvent = False
+            return
         areaID, regionID, selected, hovered = (-1,
          -1,
          False,
@@ -237,12 +297,43 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
     def __onNotifyCursorDragging(self, event):
         if self._helper:
             isDragging = event.ctx.get('isDragging', False)
-            if not isDragging:
-                self._helper.setCursorDragging(False)
+            if isDragging:
+                self.__cleanupSuspendHighlighterCallback()
+                self._suspendHighlighterCallbackID = BigWorld.callback(self.__FADE_OUT_DELAY, makeCallbackWeak(self.__onSuspendHighlighter))
+                self._isDraggingInProcess = False
+                g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, self.__onSpaceMoving)
+            else:
+                g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, self.__onSpaceMoving)
+                self._notHandleHighlighterEvent = False
+                if self._suspendHighlighterCallbackID and self._isDraggingInProcess:
+                    self._notHandleHighlighterEvent = True
+                self._isDraggingInProcess = False
+                self.__cleanupSuspendHighlighterCallback()
+                self._helper.setSuspended(False)
 
-    def __onNotifySpaceMoved(self, event):
+    def __cleanupSuspendHighlighterCallback(self):
+        if self._suspendHighlighterCallbackID:
+            BigWorld.cancelCallback(self._suspendHighlighterCallbackID)
+            self._suspendHighlighterCallbackID = None
+        return
+
+    def __onSuspendHighlighter(self):
         if self._helper:
-            dx = event.ctx.get('dx')
-            dy = event.ctx.get('dy')
-            if dx or dy:
-                self._helper.setCursorDragging(True)
+            self._helper.setSuspended(True)
+        self._suspendHighlighterCallbackID = None
+        return
+
+    def __onSpaceMoving(self, event):
+        dx = event.ctx.get('dx', 0)
+        dy = event.ctx.get('dy', 0)
+        dz = event.ctx.get('dz', 0)
+        if dx or dy or dz:
+            self._isDraggingInProcess = True
+            self.__cleanupSuspendHighlighterCallback()
+            self.__onSuspendHighlighter()
+            g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, self.__onSpaceMoving)
+
+    def __showCustomization(self):
+        self.__showCustomizationCallbackId = None
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_CUSTOMIZATION), scope=EVENT_BUS_SCOPE.LOBBY)
+        return

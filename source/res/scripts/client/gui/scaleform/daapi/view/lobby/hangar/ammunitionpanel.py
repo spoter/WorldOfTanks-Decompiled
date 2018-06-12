@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
 import logging
-from constants import QUEUE_TYPE
+from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from gui.prb_control.entities.listener import IGlobalListener
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS
 from CurrentVehicle import g_currentVehicle
@@ -22,7 +22,7 @@ from gui.shared.gui_items.vehicle_equipment import BATTLE_BOOSTER_LAYOUT_SIZE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n, dependency
 from skeletons.gui.shared import IItemsCache
-from gui.prb_control.settings import CTRL_ENTITY_TYPE
+from skeletons.gui.customization import ICustomizationService
 ARTEFACTS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.OPTIONALDEVICE], GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.EQUIPMENT])
 _BOOSTERS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER],)
 _ABILITY_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_ABILITY],)
@@ -77,6 +77,7 @@ def getAmmo(shells):
 
 class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
+    service = dependency.descriptor(ICustomizationService)
 
     def update(self):
         self._update()
@@ -85,10 +86,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         self.fireEvent(LoadViewEvent(VIEW_ALIAS.TECHNICAL_MAINTENANCE), EVENT_BUS_SCOPE.LOBBY)
 
     def showCustomization(self):
-        if not g_currentVehicle.hangarSpace.spaceInited or not g_currentVehicle.hangarSpace.isModelLoaded:
-            _logger.warning('Space or vehicle is not presented, could not show customization view, return')
-            return
-        self.fireEvent(LoadViewEvent(VIEW_ALIAS.LOBBY_CUSTOMIZATION), EVENT_BUS_SCOPE.LOBBY)
+        self.service.showCustomization()
 
     def toRentContinue(self):
         if g_currentVehicle.isPresent():
@@ -158,4 +156,4 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             self.as_showBattleAbilitiesAlertS(False)
 
     def __getSlotsRange(self):
-        return HANGAR_FITTING_SLOTS if self.prbDispatcher is not None and self.prbDispatcher.getEntity().getCtrlType() == CTRL_ENTITY_TYPE.PREQUEUE and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) else VEHICLE_FITTING_SLOTS
+        return HANGAR_FITTING_SLOTS if self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC) else VEHICLE_FITTING_SLOTS

@@ -13,6 +13,7 @@ from gui.shared.events import LoginEventEx, GUICommonEvent
 from helpers import dependency
 from predefined_hosts import g_preDefinedHosts, getHostURL
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gameplay import IGameplayLogic
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
 from constants import WGC_STATE
@@ -108,13 +109,14 @@ class SelectPrb(Action):
 
 class DisconnectFromPeriphery(Action):
     connectionMgr = dependency.descriptor(IConnectionManager)
+    gameplay = dependency.descriptor(IGameplayLogic)
 
     def isInstantaneous(self):
         return False
 
     def invoke(self):
         self._running = True
-        g_appLoader.goToLoginByRQ()
+        self.gameplay.goToLoginByRQ()
 
     def isRunning(self):
         app = g_appLoader.getApp()
@@ -151,7 +153,7 @@ class ConnectToPeriphery(Action):
         return super(ConnectToPeriphery, self).isRunning()
 
     def invoke(self):
-        self.__wgcLogin = BigWorld.WGC_processingState() == WGC_STATE.READY_TO_LOGIN
+        self.__wgcLogin = self.loginManager.checkWgcAvailability()
         if self.__host and (self.__credentials or self.__wgcLogin):
             if not self.__wgcLogin:
                 if len(self.__credentials) < 2:

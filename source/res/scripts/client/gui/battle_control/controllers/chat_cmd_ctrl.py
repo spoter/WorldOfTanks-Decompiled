@@ -131,6 +131,8 @@ class ChatCommandsController(IBattleController):
     def handleSPGAimAreaCommand(self, player):
         boundingBox = player.arena.arenaType.boundingBox
         desiredShotPoint = player.inputHandler.getMarkerPoint()
+        if not boundingBox[0][0] <= desiredShotPoint.x <= boundingBox[1][0] or not boundingBox[0][1] <= desiredShotPoint.z <= boundingBox[1][1]:
+            desiredShotPoint = None
         if desiredShotPoint is not None:
             reloadTime = self.__getReloadTime()
             cellIdx = minimap_utils.getCellIdxFromPosition(desiredShotPoint, boundingBox)
@@ -232,7 +234,7 @@ class ChatCommandsController(IBattleController):
         if cmd is None:
             return
         else:
-            if cmd.isEpicGlobalMessage:
+            if cmd.isEpicGlobalMessage():
                 if soundNotifications and hasattr(soundNotifications, 'play'):
                     soundNotifications.play(EPIC_SOUND.BF_EB_GLOBAL_MESSAGE)
             elif soundNotifications and hasattr(soundNotifications, 'play'):
