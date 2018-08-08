@@ -3,10 +3,8 @@
 from collections import namedtuple
 import BigWorld
 import constants
-import personal_missions
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
-from gui import SystemMessages, makeHtmlString
-from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData, getAwardsWindowBonuses, getPersonalMissionAwardsFormatter
+from gui import makeHtmlString
+from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData, getAwardsWindowBonuses
 from gui.Scaleform.genConsts.AWARDWINDOW_CONSTANTS import AWARDWINDOW_CONSTANTS
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -14,19 +12,15 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.server_events import events_helpers
-from gui.server_events.pm_constants import SOUNDS
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
-from gui.shared.utils.decorators import process
 from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.shared_components import i18n
 from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
-from gui.server_events.awards_formatters import AWARDS_SIZES
 AwardsRibbonInfo = namedtuple('AwardsRibbonInfo', ['awardForCompleteText',
  'isAwardForCompleteVisible',
  'awardReceivedText',
@@ -38,27 +32,6 @@ AwardsRibbonInfo = namedtuple('AwardsRibbonInfo', ['awardForCompleteText',
 
 def packRibbonInfo(awards=None, awardForCompleteText='', awardReceivedText='', awardBonusStrText=''):
     return AwardsRibbonInfo(awardForCompleteText=awardForCompleteText, isAwardForCompleteVisible=bool(len(awardForCompleteText)), awardReceivedText=awardReceivedText, isAwardsReceivedVisible=bool(len(awardReceivedText)), awardBonusStrText=awardBonusStrText, isAwardBonusStrVisible=bool(len(awardBonusStrText)), ribbonSource=RES_ICONS.MAPS_ICONS_QUESTS_AWARDRIBBON, awards=awards or [])
-
-
-def _getNextMissionInOperationByID(questID):
-    eventsCache = dependency.instance(IEventsCache)
-    quests = eventsCache.personalMissions.getQuests()
-    questsInOperation = sorted(personal_missions.g_cache.questListByOperationIDChainID(quests[questID].getOperationID(), quests[questID].getChainID()))
-    try:
-        questInd = questsInOperation.index(questID)
-        for nextID in questsInOperation[questInd + 1:]:
-            if quests[nextID].isAvailableToPerform():
-                return nextID
-
-        for nextID in questsInOperation[:questInd + 1]:
-            if quests[nextID].isAvailableToPerform():
-                return nextID
-
-    except ValueError:
-        LOG_ERROR('Cannot find quest ID {questID} in quests from tile {quests}'.format(questID=questID, quests=questsInOperation))
-        LOG_CURRENT_EXCEPTION()
-
-    return None
 
 
 class AwardAbstract(object):
@@ -244,6 +217,7 @@ class AchievementsAward(AwardAbstract):
         for a in self.__achieves:
             result.append({'type': a.getRecordName()[1],
              'block': a.getBlock(),
+             'rank': a.getValue(),
              'icon': {'big': a.getHugeIcon(),
                       'small': a.getSmallIcon()}})
 
@@ -454,105 +428,6 @@ class MissionAward(MissionAwardAbstract):
         return len(self._eventsCache.getQuests(lambda q: q.isAvailable()[0] and q.getType() not in constants.EVENT_TYPE.SHARED_QUESTS and not q.isCompleted()))
 
 
-class PersonalMissionAward(MissionAward):
-
-    def __init__(self, quest, ctx, proxyEvent):
-        super(PersonalMissionAward, self).__init__(quest, ctx, proxyEvent)
-        nextQuestID = _getNextMissionInOperationByID(int(self._quest.getID()))
-        if nextQuestID is not None and not self._quest.isFinal():
-            self._nextQuest = self._eventsCache.personalMissions.getQuests()[nextQuestID]
-        else:
-            self._nextQuest = None
-        self._operation = self._eventsCache.personalMissions.getOperations()[self._quest.getOperationID()]
-        self._isAddReward = ctx.get('isAddReward', False)
-        self._isMainReward = ctx.get('isMainReward', False)
-        self._userStringConditions = []
-        return
-
-    def getBackgroundImage(self):
-        return '../maps/icons/quests/awards/tile_{}_{}_award_bg.png'.format(self._operation.getCampaignID(), self._operation.getID())
-
-    def getHeader(self):
-        return text_styles.stats(_ms('#quests:tileChainsView/title', name=self._operation.getShortUserName()))
-
-    def getDescription(self):
-        if self._isAddReward:
-            key = MENU.AWARDWINDOW_PERSONALMISSION_COMPLETEWITHHONORS
-        else:
-            key = MENU.AWARDWINDOW_PERSONALMISSION_COMPLETE
-        return text_styles.promoTitle(key)
-
-    def getCurrentQuestConditions(self):
-        return self._quest.getUserMainCondition().split('\n')[:-1]
-
-    def getMainStatusText(self):
-        statusText = text_styles.success(MENU.AWARDWINDOW_MISSION_MAINCONDITIONCOMPLETE)
-        return text_styles.concatStylesWithSpace(statusText, text_styles.standard(MENU.AWARDWINDOW_PERSONALMISSION_ALREADYCOMPLETED)) if not self._isMainReward else statusText
-
-    def getAdditionalStatusText(self):
-        return text_styles.success(MENU.AWARDWINDOW_PERSONALMISSION_SIDECONDITIONCOMPLETED) if self._isAddReward else text_styles.neutral(MENU.AWARDWINDOW_PERSONALMISSION_SIDECONDITIONNOTCOMPLETED)
-
-    def getAdditionalStatusIcon(self):
-        return RES_ICONS.MAPS_ICONS_LIBRARY_OKICON if self._isAddReward else ''
-
-    def getNextQuestHeader(self):
-        return text_styles.highTitle(self._nextQuest.getUserName()) if self._nextQuest is not None else ''
-
-    def getNextQuestConditions(self):
-        if self._nextQuest is not None and not self._userStringConditions:
-            conditions = self._nextQuest.getUserMainCondition().split('\n')[:-1]
-            self._userStringConditions.extend(conditions)
-        return self._userStringConditions
-
-    def getNextQuestConditionsHeader(self):
-        return text_styles.neutral(PERSONAL_MISSIONS.DETAILEDVIEW_CONDITIONSLABEL) if self._nextQuest is not None else ''
-
-    def getAvailableText(self):
-        return text_styles.standard(MENU.AWARDWINDOW_PERSONALMISSION_AVAILABLE)
-
-    def getAwards(self):
-        bonuses = []
-        if self._isMainReward:
-            bonuses.extend(self._quest.getBonuses(isMain=True))
-        if self._isAddReward:
-            bonuses.extend(self._quest.getBonuses(isMain=False))
-        return getPersonalMissionAwardsFormatter().getFormattedBonuses(bonuses, size=AWARDS_SIZES.BIG)
-
-    def getNextButtonText(self):
-        return _ms(MENU.AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD) if self._quest.isFinal() else _ms(MENU.AWARDWINDOW_PERSONALMISSION_NEXTBUTTON)
-
-    def isNextAvailable(self):
-        return not self._quest.isFinal() and self._nextQuest is not None
-
-    def isLast(self):
-        return self._quest.isFinal() and self._quest.needToGetReward()
-
-    def isPersonal(self):
-        return True
-
-    def getNextButtonTooltip(self):
-        return makeTooltip(MENU.AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD_TOOLTIP_HEADER, MENU.AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD_TOOLTIP_BODY) if self._quest.isFinal() else makeTooltip(MENU.AWARDWINDOW_PERSONALMISSION_NEXTBUTTON_TOOLTIP_HEADER, MENU.AWARDWINDOW_PERSONALMISSION_NEXTBUTTON_TOOLTIP_BODY)
-
-    def handleNextButton(self):
-        if self._nextQuest is not None:
-            self._proxyEvent(missionID=self._nextQuest.getID())
-        else:
-            self.__tryGetAward()
-        return
-
-    def handleCurrentButton(self):
-        self._proxyEvent(missionID=self._quest.getID())
-
-    def getSound(self):
-        return SOUNDS.AWARD_WINDOW
-
-    @process('updating')
-    def __tryGetAward(self):
-        result = yield events_helpers.getPersonalMissionAward(self._quest)
-        if result and result.userMsg:
-            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
-
-
 class RankedBoobyAward(MissionAward):
 
     def __init__(self, quest, proxyEvent):
@@ -572,7 +447,7 @@ class OperationUnlockedAward(MissionAward):
     def __init__(self, quest, ctx, proxyEvent):
         super(OperationUnlockedAward, self).__init__(quest, ctx, proxyEvent)
         _nextOperationID = ctx.get('nextOperationID', 1)
-        self._nextOperation = self._eventsCache.personalMissions.getOperations()[_nextOperationID]
+        self._nextOperation = self._eventsCache.getPersonalMissions().getAllOperations()[_nextOperationID]
 
     def isPersonal(self):
         return False
@@ -581,7 +456,7 @@ class OperationUnlockedAward(MissionAward):
         return _ms(PERSONAL_MISSIONS.OPERATIONUNLOCKEDWINDOW_TITLE)
 
     def getBackgroundImage(self):
-        return '../maps/icons/quests/awards/tile_1_{}_award_bg.png'.format(self._nextOperation.getID())
+        return '../maps/icons/quests/awards/operation_{}_award_bg.png'.format(self._nextOperation.getID())
 
     def getHeader(self):
         return text_styles.superPromoTitle(makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': 'center',

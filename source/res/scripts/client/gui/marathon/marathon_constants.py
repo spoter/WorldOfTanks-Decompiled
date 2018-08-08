@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/marathon/marathon_constants.py
+from collections import namedtuple
 from shared_utils import CONST_CONTAINER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-MARATHON_VEHICLE_PREFIX = 'It13_Progetto_M35_mod_46'
-MARATHON_VEHICLE_ID = 51361
-MARATHON_PREFIX = 'event_marathon:'
-MARATHON_SUSPEND = ':suspend'
-MARATHON_COMPLETED_TOKEN_POSTFIX = '_PASS'
-MARATHON_AWARD_TOKENS = ('event_marathon:IM18_COMPLETE', 'event_marathon:IM18_S10_PASS')
-MARATHON_QUESTS_IN_CHAIN = 10
+MarathonData = namedtuple('MarathonData', 'prefix tokenPrefix url label tabTooltip vehiclePrefix vehicleID suspend\n                          completedTokenPostfix awardTokens questsInChain minVehicleLevel showInPostBattle\n                          tooltipHeaderType tooltips icons quests')
+TooltipsData = namedtuple('TooltipsData', 'header body bodyExtra errorBattleType errorVehType extraStateSteps extraStateDiscount\n                          extraStateCompleted stateStart stateEnd stateProgress daysShort hoursShort')
+IconsData = namedtuple('IconsData', 'tooltipHeader libraryOkIcon mainHangarFlag okIcon timeIcon alertIcon iconFlag saleIcon')
+QuestsData = namedtuple('QuestsData', 'titleSetProgress autoSetAnnounce autoSetProgress autoSetFinished announceTime timeFinish')
+COUNTDOWN_TOOLTIP_HEADER = 'countdown'
+PROGRESS_TOOLTIP_HEADER = 'progress'
+MARATHONS_DATA = tuple()
+DEFAULT_MARATHON_PREFIX = MARATHONS_DATA[0].prefix if any(MARATHONS_DATA) else None
 ZERO_TIME = 0.0
-MIN_VEHICLE_LVL = 8
 
 class MARATHON_STATE(CONST_CONTAINER):
     NOT_STARTED = 0

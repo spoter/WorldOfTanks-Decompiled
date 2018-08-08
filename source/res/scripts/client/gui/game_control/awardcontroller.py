@@ -3,7 +3,6 @@
 import types
 import weakref
 from abc import ABCMeta, abstractmethod
-from collections import defaultdict
 import ArenaType
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
@@ -30,6 +29,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.ranked_battles import ranked_helpers
 from gui.server_events import events_dispatcher as quests_events
+from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, BRANCH_TO_OPERATION_IDS, CHAMPION_BADGES_BY_BRANCH
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -63,8 +63,6 @@ class AwardController(IAwardController, IGlobalListener):
          BoosterAfterBattleAwardHandler(self),
          PunishWindowHandler(self),
          RefSystemQuestsWindowHandler(self),
-         PersonalMissionsBonusHandler(self),
-         PMWindowAfterBattleHandler(self),
          TokenQuestsWindowHandler(self),
          MotiveQuestsWindowHandler(self),
          RefSysStatusWindowHandler(self),
@@ -72,7 +70,9 @@ class AwardController(IAwardController, IGlobalListener):
          VictoryHandler(self),
          BattlesCountHandler(self),
          PveBattlesCountHandler(self),
-         PersonalMissionsAutoWindowHandler(self),
+         PersonalMissionBonusHandler(self),
+         PersonalMissionWindowAfterBattleHandler(self),
+         PersonalMissionAutoWindowHandler(self),
          PersonalMissionByAwardListHandler(self),
          PersonalMissionOperationAwardHandler(self),
          PersonalMissionOperationUnlockedHandler(self),
@@ -260,10 +260,10 @@ class RefSystemQuestsWindowHandler(ServiceChannelHandler):
         self._awardCtrl.refSystem.showCreditsAwardWindow(message.data.get('credits', 0), completedQuestIDs)
 
 
-class PersonalMissionsBonusHandler(ServiceChannelHandler):
+class PersonalMissionBonusHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(PersonalMissionsBonusHandler, self).__init__(SYS_MESSAGE_TYPE.potapovQuestBonus.index(), awardCtrl)
+        super(PersonalMissionBonusHandler, self).__init__(SYS_MESSAGE_TYPE.potapovQuestBonus.index(), awardCtrl)
 
     def _showAward(self, ctx):
         LOG_DEBUG('Show personal mission bonus award!', ctx)
@@ -281,10 +281,10 @@ class PersonalMissionsBonusHandler(ServiceChannelHandler):
         return
 
 
-class PMWindowAfterBattleHandler(ServiceChannelHandler):
+class PersonalMissionWindowAfterBattleHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(PMWindowAfterBattleHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+        super(PersonalMissionWindowAfterBattleHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
 
     def _showAward(self, ctx):
         achievements = []
@@ -433,11 +433,14 @@ class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
             questID, ctx = self._getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs)
             if questID in allQuests:
                 quest = allQuests[questID]
+                if uniqueQuestID.endswith('_add_award_list'):
+                    ctx.update({'awardListReturned': True})
                 if self.isShowCongrats(quest):
-                    ctx.update(eventsCache=self.eventsCache)
+                    ctx.update({'eventsCache': self.eventsCache})
                     completedQuests[questID] = (quest, ctx)
 
-        for quest, context in completedQuests.itervalues():
+        values = sorted(completedQuests.values(), key=lambda v: v[0].getID())
+        for quest, context in values:
             self._showWindow(quest, context)
 
     @staticmethod
@@ -456,7 +459,7 @@ class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
         return (uniqueQuestID, {})
 
 
-class PersonalMissionsAutoWindowHandler(BattleQuestsAutoWindowHandler):
+class PersonalMissionAutoWindowHandler(BattleQuestsAutoWindowHandler):
 
     @staticmethod
     def _showWindow(quest, context):
@@ -472,12 +475,13 @@ class PersonalMissionsAutoWindowHandler(BattleQuestsAutoWindowHandler):
             pqType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
             if pqType.id not in completedQuests:
                 ctx = {'isMainReward': pqType.mainQuestID in completedQuestUniqueIDs,
-                 'isAddReward': pqType.addQuestID in completedQuestUniqueIDs}
+                 'isAddReward': pqType.addQuestID in completedQuestUniqueIDs,
+                 'awardListReturned': uniqueQuestID.endswith('_add_award_list')}
                 return (pqType.id, ctx)
         return (None, {})
 
 
-class PersonalMissionByAwardListHandler(PersonalMissionsAutoWindowHandler):
+class PersonalMissionByAwardListHandler(PersonalMissionAutoWindowHandler):
 
     def _needToShowAward(self, ctx):
         _, msg = ctx
@@ -499,63 +503,68 @@ class PersonalMissionByAwardListHandler(PersonalMissionsAutoWindowHandler):
             pqType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
             if pqType.id not in completedQuests:
                 ctx = {'isMainReward': True,
-                 'isAddReward': False}
+                 'isAddReward': False,
+                 'isAwardListUsed': True}
                 return (pqType.id, ctx)
         return (None, {})
 
 
 class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
-    OPERATION_PREFIXES = {'pt_final_s1_t1': 1,
-     'pt_final_s1_t2': 2,
-     'pt_final_s1_t3': 3,
-     'pt_final_s1_t4': 4}
-    BADGE_QUEST_ID = 'pt_final_badge'
-    ATTACH_TO_OPERATION = 4
+    __FINAL_BRANCHES_OPERATION_IDS = tuple([ ids[-1] for ids in BRANCH_TO_OPERATION_IDS.values() ])
+    __CHAMPION_BADGES_IDS = CHAMPION_BADGES_BY_BRANCH.values()
+
+    def __init__(self, awardCtrl):
+        super(PersonalMissionOperationAwardHandler, self).__init__(awardCtrl)
+        self.__postponedAwards = []
 
     def _needToShowAward(self, ctx):
         _, msg = ctx
         if msg is not None and isinstance(msg.data, types.DictType):
             completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
             for uniqueQuestID in completedQuestUniqueIDs:
-                if uniqueQuestID == self.BADGE_QUEST_ID:
-                    return True
-                for operationToken in self.OPERATION_PREFIXES:
-                    if uniqueQuestID.startswith(operationToken):
-                        return True
+                for questID, prefixes in PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID.iteritems():
+                    if uniqueQuestID.startswith(prefixes):
+                        if uniqueQuestID in self.__CHAMPION_BADGES_IDS:
+                            return True
+                        if questID in self.__FINAL_BRANCHES_OPERATION_IDS:
+                            self.__postponedAwards.append(uniqueQuestID)
+                        else:
+                            return True
 
         return False
 
     def _showAward(self, ctx):
         _, message = ctx
-        completedQuests = defaultdict(dict)
+        completedQuestIDs = message.data.get('completedQuestIDs', set())
         allQuests = self.eventsCache.getHiddenQuests()
-        completedQuestUniqueIDs = message.data.get('completedQuestIDs', set())
-        for uniqueQuestID in (qID for qID in completedQuestUniqueIDs if qID in allQuests):
-            if uniqueQuestID == self.BADGE_QUEST_ID:
-                quest = allQuests[uniqueQuestID]
-                completedQuests[self.ATTACH_TO_OPERATION][uniqueQuestID] = quest
-            for oRewardPrefix, oID in self.OPERATION_PREFIXES.iteritems():
-                if uniqueQuestID.startswith(oRewardPrefix):
-                    quest = allQuests[uniqueQuestID]
-                    completedQuests[oID][uniqueQuestID] = quest
+        for operationId, prefixes in PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID.iteritems():
+            quests = []
+            for uniqueQuestID in completedQuestIDs:
+                if uniqueQuestID.startswith(prefixes) and uniqueQuestID in allQuests:
+                    quests.append(uniqueQuestID)
 
-        for operationID, quests in completedQuests.iteritems():
-            ctx = {'operationID': operationID,
-             'quests': quests}
-            self._showWindow(None, ctx)
+            if quests:
+                ctx = {'operationID': operationId,
+                 'branch': getBranchByOperationId(operationId),
+                 'questIds': quests + self.__postponedAwards}
+                self._showWindow(None, ctx)
+                self.__postponedAwards = []
 
         return
 
     @staticmethod
     def _showWindow(quest, context):
-        quests_events.showPersonalMissionCongratulationAward(context)
+        quests_events.showPersonalMissionsOperationAwardsScreen(context)
 
 
 class PersonalMissionOperationUnlockedHandler(BattleQuestsAutoWindowHandler):
     OPERATION_COMPLETION_IDS = {'pt_final_s1_t1': 1,
      'pt_final_s1_t2': 2,
      'pt_final_s1_t3': 3,
-     'pt_final_s1_t4': 4}
+     'pt_final_s1_t4': 4,
+     'pt_final_s2_t5': 5,
+     'pt_final_s2_t6': 6,
+     'pt_final_s2_t7': 7}
 
     def _needToShowAward(self, ctx):
         _, msg = ctx
@@ -570,7 +579,7 @@ class PersonalMissionOperationUnlockedHandler(BattleQuestsAutoWindowHandler):
     def _showAward(self, ctx):
         _, message = ctx
         allQuests = self.eventsCache.getHiddenQuests()
-        operations = self.eventsCache.personalMissions.getOperations()
+        operations = self.eventsCache.getPersonalMissions().getAllOperations()
         context = {'eventsCache': self.eventsCache}
         completedQuestUniqueIDs = message.data.get('completedQuestIDs', set())
         for uniqueQuestID in (qID for qID in completedQuestUniqueIDs if qID in allQuests):
@@ -578,10 +587,11 @@ class PersonalMissionOperationUnlockedHandler(BattleQuestsAutoWindowHandler):
                 if uniqueQuestID == oCompletionID:
                     quest = allQuests[uniqueQuestID]
                     operation = operations[oID]
-                    nextOperationID = operation.getNextOperationID()
-                    if nextOperationID:
-                        context['nextOperationID'] = nextOperationID
-                        self._showWindow(quest, context)
+                    nextOperationIDs = operation.getNextOperationIDs()
+                    for nextOperationID in nextOperationIDs:
+                        ctx = {'nextOperationID': nextOperationID}
+                        ctx.update(context)
+                        self._showWindow(quest, ctx)
 
     @staticmethod
     def _showWindow(quest, context):

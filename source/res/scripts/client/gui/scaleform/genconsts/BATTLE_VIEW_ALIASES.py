@@ -43,7 +43,6 @@ class BATTLE_VIEW_ALIASES(object):
     BOOTCAMP_BATTLE_TOP_HINT = 'bootcampBattleTopHint'
     GAME_MESSAGES_PANEL = 'gameMessagesPanel'
     EPIC_RANDOM_SCORE_PANEL = 'epicRandomScorePanel'
-    COLOR_SETTINGS_TIP_PANEL = 'colorSettingsTipPanel'
     EPIC_RESPAWN_VIEW = 'epicRespawnView'
     EPIC_SCORE_PANEL = 'epicScorePanel'
     EPIC_TIMER = 'epicTimer'
@@ -57,3 +56,5 @@ class BATTLE_VIEW_ALIASES(object):
     SUPER_PLATOON_PANEL = 'superPlatoonPanel'
     BATTLE_TANK_CAROUSEL = 'battleTankCarousel'
     BATTLE_TANK_CAROUSEL_FILTER_POPOVER = 'battleTankCarouselFilterPopover'
+    QUEST_PROGRESS_TOP_VIEW = 'questProgressTopView'
+    HINT_PANEL = 'battleHintPanel'

@@ -14,6 +14,7 @@ MovingTextProps = namedtuple('MovingTextProps', 'show internalBrowser')
 LoginRssFeedProps = namedtuple('LoginRssFeedProps', 'show url internalBrowser')
 BrowserProps = namedtuple('BrowserProps', 'url params')
 PostBattleExchangeProps = namedtuple('PostBattleExchangeProps', 'enabled url')
+EasterEggProps = namedtuple('EasterEggProps', 'enabled')
 _MacrosValue = namedtuple('MacrosValue', 'macros dictValue')
 
 class EULAProps(object):
@@ -69,7 +70,8 @@ _SETTING_CONVERTERS = {'loginRssFeed': _convertToNamedTuple,
  'markerScaleSettings': _convertVector4ToTuple,
  'markerBgSettings': _convertVector4ToTuple,
  'browser': _convertToNamedTuple,
- 'postBattleExchange': _convertToNamedTuple}
+ 'postBattleExchange': _convertToNamedTuple,
+ 'easterEgg': _convertToNamedTuple}
 _DEFAULT_SETTINGS = {'registrationURL': '',
  'registrationProxyURL': '',
  'recoveryPswdURL': '',
@@ -130,7 +132,8 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'tokenShopAvailabilityURL': '',
  'tokenShopAPIKey': '',
  'personalMissions': {},
- 'rankedBattles': {}}
+ 'rankedBattles': {},
+ 'easterEgg': EasterEggProps(True)}
 
 class GuiSettings(object):
 

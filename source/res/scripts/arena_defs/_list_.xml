@@ -108,6 +108,10 @@
     <name>	101_dday	</name>
   </map>
   <map>
+    <id>	74	</id>
+    <name>	114_czech	</name>
+  </map>
+  <map>
     <id>	75	</id>
     <name>	112_eiffel_tower_ctf	</name>
   </map>
@@ -128,11 +132,15 @@
     <name>	217_er_alaska	</name>
   </map>
   <map>
-    <id>	96	</id>
-    <name>	208_bf_epic_normandy	</name>
+    <id>	83	</id>
+    <name>	99_poland	</name>
   </map>
   <map>
-    <id>	1333	</id>
-    <name>	1001_frontline_testmap	</name>
+    <id>	84	</id>
+    <name>	90_minsk	</name>
+  </map>
+  <map>
+    <id>	96	</id>
+    <name>	208_bf_epic_normandy	</name>
   </map>
 </_list_.xml>

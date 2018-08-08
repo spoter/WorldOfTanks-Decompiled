@@ -96,16 +96,17 @@ def isPremiumIGR(tags):
 
 
 class PlayerInfoVO(object):
-    __slots__ = ('accountDBID', 'name', 'clanAbbrev', 'igrType', 'personaMissionIDs', 'isPrebattleCreator', 'forbidInBattleInvitations')
+    __slots__ = ('accountDBID', 'name', 'clanAbbrev', 'igrType', 'personaMissionIDs', 'personalMissionInfo', 'isPrebattleCreator', 'forbidInBattleInvitations')
     eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, accountDBID=0L, name=None, clanAbbrev='', igrType=IGR_TYPE.NONE, personalMissionIDs=None, isPrebattleCreator=False, forbidInBattleInvitations=False, **kwargs):
+    def __init__(self, accountDBID=0L, name=None, clanAbbrev='', igrType=IGR_TYPE.NONE, personalMissionIDs=None, personalMissionInfo=None, isPrebattleCreator=False, forbidInBattleInvitations=False, **kwargs):
         super(PlayerInfoVO, self).__init__()
         self.accountDBID = accountDBID
         self.name = name
         self.clanAbbrev = clanAbbrev
         self.igrType = igrType
         self.personaMissionIDs = personalMissionIDs or []
+        self.personalMissionInfo = personalMissionInfo or {}
         self.isPrebattleCreator = isPrebattleCreator
         self.forbidInBattleInvitations = forbidInBattleInvitations
 
@@ -130,7 +131,7 @@ class PlayerInfoVO(object):
         return self.name if self.name else i18n.makeString(settings.UNKNOWN_PLAYER_NAME)
 
     def getRandomPersonalMissions(self):
-        pQuests = self.eventsCache.random.getQuests()
+        pQuests = self.eventsCache.getPersonalMissions().getAllQuests()
         return self.__getPersonaMissionIDs(pQuests)
 
     def __getPersonaMissionIDs(self, pQuests):

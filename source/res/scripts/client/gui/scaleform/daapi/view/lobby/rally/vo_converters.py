@@ -427,51 +427,6 @@ def makeUnitVO(unitEntity, unitMgrID=None, app=None, maxPlayerCount=MAX_PLAYER_C
      'description': unitEntity.getCensoredComment(unitMgrID=unitMgrID)}
 
 
-def makeSortieVO(unitEntity, isCommander, unitMgrID=None, app=None, canInvite=True, maxPlayerCount=MAX_PLAYER_COUNT_ALL):
-    fullData = unitEntity.getUnitFullData(unitMgrID=unitMgrID)
-    levelsValidation = unitEntity.validateLevels()
-    canDoAction, restriction = levelsValidation.isValid, levelsValidation.restriction
-    sumLevelsStr = makeTotalLevelLabel(fullData.stats, restriction)
-    slots = _getSlotsData(unitMgrID, fullData, app, unitEntity.getRosterSettings().getLevelsRange(), maxPlayerCount=maxPlayerCount)
-    if fullData.playerInfo.isInSlot:
-        disableCanBeTakenButtonInSlots(slots)
-    if fullData.flags.isLocked() or unitEntity.isStrongholdUnitFreezed():
-        freezedInSlots(slots)
-        canAssignToSlot = False
-    else:
-        canAssignToSlot = canInvite
-    return {'canInvite': canInvite,
-     'isCommander': isCommander,
-     'isFreezed': fullData.flags.isLocked(),
-     'canAssignToSlot': canAssignToSlot,
-     'hasRestrictions': fullData.unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
-     'statusLbl': makeUnitStateLabel(fullData.flags),
-     'statusValue': fullData.flags.isOpened(),
-     'sumLevelsInt': fullData.stats.curTotalLevel,
-     'sumLevels': sumLevelsStr,
-     'sumLevelsError': canDoAction,
-     'slots': slots,
-     'description': unitEntity.getCensoredComment(unitMgrID=unitMgrID)}
-
-
-def disableCanBeTakenButtonInSlots(slots):
-    for player in slots:
-        if player['player'] is None:
-            player['canBeTaken'] = False
-
-    return slots
-
-
-def freezedInSlots(slots):
-    for player in slots:
-        if player['player'] is not None and player['selectedVehicle'] is not None:
-            player['isFreezed'] = True
-            player['isDragNDropFreezed'] = False
-        player['canBeTaken'] = False
-
-    return slots
-
-
 def makeUnitRosterVO(unit, pInfo, index=None, levelsRange=None):
     itemsCache = dependency.instance(IItemsCache)
     vehicleGetter = itemsCache.items.getItemByCD
@@ -693,17 +648,9 @@ def makeDirectionVO(buildIdx, isAttack, battleIdx):
 
 def makeOpenRoomButtonVO(isOpen):
     if isOpen:
-        label = i18n.makeString(FORTIFICATIONS.STRONGHOLDBUTTONS_MAKEINVISIBLE)
+        label, stateString, tooltipString = i18n.makeString(FORTIFICATIONS.STRONGHOLDBUTTONS_MAKEINVISIBLE), i18n.makeString(FORTIFICATIONS.STRONGHOLDBUTTONS_MAKEINVISIBLESTATUS), i18n.makeString(TOOLTIPS.FORTIFICATION_UNIT_ACCESS_BODYOPEN)
     else:
-        label = i18n.makeString(FORTIFICATIONS.STRONGHOLDBUTTONS_MAKEVISIBLE)
-    if isOpen:
-        stateString = i18n.makeString(FORTIFICATIONS.STRONGHOLDBUTTONS_MAKEINVISIBLESTATUS)
-    else:
-        stateString = i18n.makeString(FORTIFICATIONS.STRONGHOLDBUTTONS_MAKEVISIBLESTATUS)
-    if isOpen:
-        tooltipString = i18n.makeString(TOOLTIPS.FORTIFICATION_UNIT_ACCESS_BODYOPEN)
-    else:
-        tooltipString = i18n.makeString(TOOLTIPS.FORTIFICATION_UNIT_ACCESS_BODYCLOSED)
+        label, stateString, tooltipString = i18n.makeString(FORTIFICATIONS.STRONGHOLDBUTTONS_MAKEVISIBLE), i18n.makeString(FORTIFICATIONS.STRONGHOLDBUTTONS_MAKEVISIBLESTATUS), i18n.makeString(TOOLTIPS.FORTIFICATION_UNIT_ACCESS_BODYCLOSED)
     return (label, stateString, tooltipString)
 
 

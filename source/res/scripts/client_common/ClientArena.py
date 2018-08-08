@@ -282,9 +282,10 @@ class ClientArena(object):
          'events': info[13],
          'igrType': info[14],
          'personalMissionIDs': info[15],
-         'crewGroup': info[16],
-         'ranked': info[17],
-         'outfitCD': info[18]}
+         'personalMissionInfo': info[16],
+         'crewGroup': info[17],
+         'ranked': info[18],
+         'outfitCD': info[19]}
         return (info[0], infoAsDict)
 
     def __vehicleStatisticsAsDict(self, stats):

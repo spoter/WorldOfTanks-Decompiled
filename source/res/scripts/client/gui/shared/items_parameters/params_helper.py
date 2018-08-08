@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/items_parameters/params_helper.py
 from collections import namedtuple
 import copy
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -105,13 +105,17 @@ def itemOnVehicleComparator(vehicle, item):
             removedModules = vehicle.descriptor.installTurret(item.intCD, vehicle.gun.intCD)
             withItemParams = params.VehicleParams(vehicle).getParamsDict()
             vehicle.descriptor.installTurret(*removedModules)
-    elif not mayInstall and reason == 'not for current vehicle' and item.itemTypeID == ITEM_TYPES.vehicleGun:
-        turret = g_paramsCache.getPrecachedParameters(item.intCD).getTurretsForVehicle(vehicle.intCD)[0]
-        removedModules = vehicle.descriptor.installTurret(turret, vehicle.gun.intCD)
-        vehicleParams = params.VehicleParams(vehicle).getParamsDict()
-        vehicle.descriptor.installTurret(turret, item.intCD)
-        withItemParams = params.VehicleParams(vehicle).getParamsDict()
-        vehicle.descriptor.installTurret(*removedModules)
+    elif not mayInstall:
+        if reason == 'not for current vehicle' and item.itemTypeID == ITEM_TYPES.vehicleGun:
+            turret = g_paramsCache.getPrecachedParameters(item.intCD).getTurretsForVehicle(vehicle.intCD)[0]
+            removedModules = vehicle.descriptor.installTurret(turret, vehicle.gun.intCD)
+            vehicleParams = params.VehicleParams(vehicle).getParamsDict()
+            vehicle.descriptor.installTurret(turret, item.intCD)
+            withItemParams = params.VehicleParams(vehicle).getParamsDict()
+            vehicle.descriptor.installTurret(*removedModules)
+        else:
+            LOG_WARNING('Module {} cannot be installed on vehicle {}'.format(item, vehicle))
+            return VehiclesComparator(withItemParams, vehicleParams)
     else:
         removedModule = vehicle.descriptor.installComponent(item.intCD)
         withItemParams = params.VehicleParams(vehicle).getParamsDict()

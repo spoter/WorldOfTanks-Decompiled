@@ -685,7 +685,7 @@ class GunParams(WeightedParam):
 
     @property
     def autoReloadTime(self):
-        return tuple(reversed(self._getRawParams().get(AUTO_RELOAD_PROP_NAME))) if self._vehicleDescr is not None else None
+        return tuple(reversed(self._getRawParams().get(AUTO_RELOAD_PROP_NAME)))
 
     def getParamsDict(self):
         stunConditionParams = (STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME)
@@ -760,7 +760,9 @@ class ShellParams(CompatibleParams):
             if self._vehicleDescr is None:
                 return NO_DATA
             result = []
-            shellDescriptor = getShellDescriptors(self._itemDescr, self._vehicleDescr)[0]
+            shellDescriptor = self.__getShellDescriptor()
+            if not shellDescriptor:
+                return
             maxDistance = self.maxShotDistance
             for distance in PIERCING_DISTANCES:
                 if distance > maxDistance:
@@ -776,7 +778,9 @@ class ShellParams(CompatibleParams):
     def maxShotDistance(self):
         if self._itemDescr.kind in _SHELL_KINDS:
             if self._vehicleDescr is not None:
-                return getShellDescriptors(self._itemDescr, self._vehicleDescr)[0].maxDistance
+                result = self.__getShellDescriptor()
+                if result:
+                    return result.maxDistance
         return
 
     @property
@@ -811,6 +815,10 @@ class ShellParams(CompatibleParams):
 
     def _getCompatible(self):
         return (('shellGuns', ', '.join(self.compatibles)),)
+
+    def __getShellDescriptor(self):
+        shellDescriptors = getShellDescriptors(self._itemDescr, self._vehicleDescr)
+        return shellDescriptors[0] if shellDescriptors else None
 
 
 class OptionalDeviceParams(WeightedParam):

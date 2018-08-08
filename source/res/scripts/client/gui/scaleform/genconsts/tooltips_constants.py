@@ -45,6 +45,7 @@ class TOOLTIPS_CONSTANTS(object):
     SHOP_MODULE = 'shopModule'
     SHOP_BATTLE_BOOSTER = 'shopBattleBooster'
     AWARD_MODULE = 'awardModule'
+    AWARD_BATTLE_BOOSTER = 'awardBattleBooster'
     TANKMAN_SKILL = 'tankmanSkill'
     TANKMAN_NEW_SKILL = 'tankmanNewSkill'
     EFFICIENCY_PARAM = 'efficiencyParam'
@@ -52,7 +53,6 @@ class TOOLTIPS_CONSTANTS(object):
     MAP = 'map'
     SETTINGS_CONTROL = 'control'
     SETTINGS_BUTTON = 'settingsButton'
-    CUSTOMIZATION_ITEM = 'customizationItem'
     TECH_CUSTOMIZATION_ITEM = 'techCustomizationItem'
     TECH_CUSTOMIZATION_HISTORIC_ITEM = 'techCustomizationHistoricItem'
     VEHICLE_FILTER = 'vehicleFilter'
@@ -90,6 +90,7 @@ class TOOLTIPS_CONSTANTS(object):
     PRIVATE_QUESTS_CHAIN = 'privateQuestsChain'
     QUESTS_VEHICLE_BONUSES = 'questVehiclesBonus'
     MAP_SMALL = 'mapSmall'
+    FORT_SORTIE_SLOT = 'fortSortieSlot'
     FORT_SORTIE = 'fortSortie'
     FORT_SORTIE_TIME_LIMIT = 'fortSortieTimeLimit'
     FORT_POPOVER_DEFRESPROGRESS = 'fortPopoverDefResProgress'
@@ -136,8 +137,10 @@ class TOOLTIPS_CONSTANTS(object):
     EVENT_BOARDS_BADGE = 'eventBoardsBadge'
     EVENT_BOARDS_BADGES_GROUP = 'eventBoardsBadgesGroup'
     OPERATION = 'operation'
+    OPERATIONS_CHAIN_DETAILS = 'operationsChainDetails'
     PERSONAL_MISSIONS_MAP_REGION = 'personalMissionsMapRegion'
     BATTLE_TRAINING = 'battleTraining'
+    OPERATION_POSTPONED = 'operationPostponed'
     SINGAPORE_WALLET_STATS = 'Stats'
     GOLD_STATS = 'goldStats'
     CREDITS_STATS = 'creditsStats'
@@ -249,6 +252,7 @@ class TOOLTIPS_CONSTANTS(object):
      MARK_OF_MASTERY,
      ACHIEVEMENT_ATTR]
     BOOSTERS_SET = [INVENTORY_BATTLE_BOOSTER,
+     AWARD_BATTLE_BOOSTER,
      BATTLE_BOOSTER,
      SHOP_BATTLE_BOOSTER,
      BATTLE_BOOSTER_COMPARE,
@@ -289,6 +293,7 @@ class TOOLTIPS_CONSTANTS(object):
      CYBER_SPORT_UNIT_LEVEL,
      CYBER_SPORT_VEHICLE_NOT_READY,
      SQUAD_SLOT_VEHICLE_SELECTED]
+    FORT_SORTIE_SET = [DIRECT_MODULE, FORT_SORTIE_SLOT]
     ELEN_SET = [EVENT_QUESTS_PREVIEW, EVENT_BOARDS_BADGE, EVENT_BOARDS_BADGES_GROUP]
     EPIC_BATTLE_SET = [EPIC_SKILL_INFO,
      EPIC_SELECTOR_INFO,
@@ -305,7 +310,9 @@ class TOOLTIPS_CONSTANTS(object):
      BADGE,
      OPERATION,
      PERSONAL_MISSION_INFO,
-     PERSONAL_MISSIONS_MAP_REGION]
+     PERSONAL_MISSIONS_MAP_REGION,
+     OPERATIONS_CHAIN_DETAILS,
+     OPERATION_POSTPONED]
     QUESTS_SET = [QUESTS_PREVIEW,
      SHEDULE_QUEST,
      MISSION_VEHICLE,

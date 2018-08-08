@@ -4,20 +4,8 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class HangarHeaderMeta(BaseDAAPIComponent):
 
-    def showCommonQuests(self):
-        self._printOverrideError('showCommonQuests')
-
-    def showPersonalQuests(self):
-        self._printOverrideError('showPersonalQuests')
-
-    def showBeginnerQuests(self):
-        self._printOverrideError('showBeginnerQuests')
-
-    def showMarathonQuests(self):
-        self._printOverrideError('showMarathonQuests')
-
-    def showEventQuests(self, eventQuestsID):
-        self._printOverrideError('showEventQuests')
+    def onQuestBtnClick(self, questType, questID):
+        self._printOverrideError('onQuestBtnClick')
 
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

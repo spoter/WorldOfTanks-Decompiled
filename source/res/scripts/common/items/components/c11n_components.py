@@ -43,6 +43,9 @@ class BaseCustomizationItem(object):
     def isRare(self):
         return ItemTags.RARE in self.tags
 
+    def isHiddenInUI(self):
+        return ItemTags.HIDDEN_IN_UI in self.tags
+
     @property
     def isUnique(self):
         return self.maxNumber > 0
@@ -66,6 +69,14 @@ class BaseCustomizationItem(object):
     @property
     def description(self):
         return self.i18n.description if self.i18n else ''
+
+    @property
+    def shortDescriptionSpecial(self):
+        return self.i18n.shortDescriptionSpecial if self.i18n else ''
+
+    @property
+    def longDescriptionSpecial(self):
+        return self.i18n.longDescriptionSpecial if self.i18n else ''
 
 
 class PaintItem(BaseCustomizationItem):

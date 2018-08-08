@@ -4,7 +4,8 @@ from constants import ARENA_BONUS_TYPE
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import formatters
-from gui.server_events.cond_formatters import packSimpleTitle, CONDITION_ICON, packDescriptionField
+from gui.server_events.cond_formatters import packSimpleTitle, packDescriptionField
+from personal_missions_constants import CONDITION_ICON
 from gui.server_events.cond_formatters.formatters import ConditionFormatter, MissionsBattleConditionsFormatter, SimpleMissionsFormatter
 from gui.server_events.cond_formatters.postbattle import PersonalMissionsConditionsFormatter
 from gui.shared.formatters import icons, text_styles

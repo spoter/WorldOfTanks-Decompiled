@@ -3,6 +3,7 @@
 from collections import namedtuple
 from debug_utils import LOG_ERROR
 from helpers import dependency
+from personal_missions import PM_BRANCH
 from shared_utils import first
 from gui.shared.utils.decorators import ReprInjector
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES as _QA
@@ -36,7 +37,7 @@ PQ_TABS = (_QA.SEASON_VIEW_TAB_RANDOM,)
 def getEnabledPQTabs(lobbyContext=None):
     if lobbyContext is not None:
         tabs = list(PQ_TABS)
-        if not lobbyContext.getServerSettings().isRegularQuestEnabled():
+        if not lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch=PM_BRANCH.REGULAR):
             tabs.remove(_QA.SEASON_VIEW_TAB_RANDOM)
     else:
         tabs = []
@@ -81,6 +82,7 @@ class _NavigationInfo(object):
         self.random = PMInfo(None, None, None)
         self.__selectedPQType = _QA.SEASON_VIEW_TAB_RANDOM
         self._missionsTab = None
+        self._marathonPrefix = None
         self._vehicleSelectorFilters = {}
         return
 
@@ -122,8 +124,14 @@ class _NavigationInfo(object):
     def getMissionsTab(self):
         return self._missionsTab
 
+    def getMarathonPrefix(self):
+        return self._marathonPrefix
+
     def setMissionsTab(self, tabID):
         self._missionsTab = tabID
+
+    def setMarathonPrefix(self, marathonPrefix):
+        self._marathonPrefix = marathonPrefix
 
     def getVehicleSelectorFilters(self):
         return self._vehicleSelectorFilters
