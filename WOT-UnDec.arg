@@ -5,4 +5,4 @@ path = "source\"
 unpack_xml = true
 decompile_pyc = true
 threads_min_count = 10
-files_in_group_min_count = 20
+files_in_group_min_count = 15
