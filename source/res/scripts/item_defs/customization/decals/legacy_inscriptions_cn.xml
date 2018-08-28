@@ -283,7 +283,7 @@
   <itemGroup>
     <name>	BURGERKING_CN_IN_SHOP	</name>
     <userString>	#vehicle_customization:inscription/special	</userString>
-    <priceGroup>	legacy inscriptions common	</priceGroup>
+    <priceGroup>	legacy notInShop	</priceGroup>
     <historical>	true	</historical>
     <type>	INSCRIPTION	</type>
     <vehicleFilter>

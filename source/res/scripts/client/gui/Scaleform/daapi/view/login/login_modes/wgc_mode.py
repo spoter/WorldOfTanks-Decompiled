@@ -8,6 +8,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import GAME
 from base_mode import BaseMode
 from predefined_hosts import g_preDefinedHosts
+from connection_mgr import LOGIN_STATUS, INVALID_TOKEN2_EXPIRED
 _g_firstEntry = True
 
 class WgcMode(BaseMode):
@@ -17,6 +18,7 @@ class WgcMode(BaseMode):
         super(WgcMode, self).__init__(*args)
         self.__wgcStoredUserSelected = wgcStoredUserSelected
         self._fallbackMode.setRememberPassword(False)
+        self._fallbackMode.resetToken()
 
     @property
     def login(self):
@@ -26,9 +28,9 @@ class WgcMode(BaseMode):
         global _g_firstEntry
         self._loginManager.addOnWgcErrorListener(self.__onWgcError)
         if self.__wgcStoredUserSelected:
-            if _g_firstEntry and not self._settingsCore.getSetting(GAME.LOGIN_SERVER_SELECTION):
+            autoLogin = _g_firstEntry and not self._settingsCore.getSetting(GAME.LOGIN_SERVER_SELECTION)
+            if autoLogin:
                 self._loginManager.tryWgcLogin()
-                g_preDefinedHosts.resetPingResult()
             _g_firstEntry = False
         else:
             self._fallbackMode.init()
@@ -55,15 +57,20 @@ class WgcMode(BaseMode):
         else:
             self._fallbackMode.changeAccount()
 
-    def doLogin(self, *args):
+    def doLogin(self, userName, password, serverName, isSocialToken2Login):
         if self.__wgcStoredUserSelected:
-            self._loginManager.tryWgcLogin()
-        elif self._fallbackMode is not None:
-            self._fallbackMode.doLogin(*args)
-        return
+            self._loginManager.tryWgcLogin(serverName)
+        else:
+            self._fallbackMode.doLogin(userName, password, serverName, isSocialToken2Login)
 
     def doSocialLogin(self, *args):
         self._fallbackMode.doSocialLogin(*args)
+
+    def skipRejectionError(self, loginStatus, responseData):
+        if self.__wgcStoredUserSelected:
+            errorMsg = responseData.get('errorMessage', '')
+            return loginStatus == LOGIN_STATUS.SESSION_END and errorMsg in INVALID_TOKEN2_EXPIRED
+        return self._fallbackMode.skipRejectionError(loginStatus, responseData)
 
     def __onWgcError(self):
         self.__stop()

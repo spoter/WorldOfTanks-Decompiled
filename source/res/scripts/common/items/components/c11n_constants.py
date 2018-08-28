@@ -32,6 +32,7 @@ class ItemTags(object):
     PREMIUM_IGR = 'premiumIGR'
     IGR = 'IGR'
     RARE = 'rare'
+    HIDDEN_IN_UI = 'hiddenInUI'
 
 
 class ApplyArea(object):
@@ -151,5 +152,6 @@ class StyleFlags(object):
     ACTIVE = ENABLED | INSTALLED
 
 
+NO_OUTFIT_DATA = ('', StyleFlags.EMPTY)
 C11N_MAX_REGION_NUM = 3
 C11N_MASK_REGION = 2

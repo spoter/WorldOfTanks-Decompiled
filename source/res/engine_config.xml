@@ -48,10 +48,13 @@
       <MIN>	0	</MIN>
     </streaming>
     <ObjectsFarPlaneManager>
-      <cullVolume>	10000	</cullVolume>
+      <cullVolume>	2800	</cullVolume>
       <decalCullDistance>	400	</decalCullDistance>
       <controlPointCullDistance>	1400	</controlPointCullDistance>
     </ObjectsFarPlaneManager>
+    <StreamedTexturePrecache>
+      <Mode>	AUTO	</Mode>
+    </StreamedTexturePrecache>
   </renderer>
   <influx>
     <force_use_bw_collision>	true	</force_use_bw_collision>
@@ -284,6 +287,9 @@
         </project>
         <project>
           <name>	customization.bnk	</name>
+        </project>
+        <project>
+          <name>	shop.bnk	</name>
         </project>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>

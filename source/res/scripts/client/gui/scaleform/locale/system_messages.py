@@ -277,6 +277,7 @@ class SYSTEM_MESSAGES(object):
     RECRUIT_WINDOW_NOT_ENOUGH_SPACE = '#system_messages:recruit_window/not_enough_space'
     RECRUIT_WINDOW_DISCONNECTED_FROM_CENTER = '#system_messages:recruit_window/disconnected_from_center'
     RECRUIT_WINDOW_FORBIDDEN = '#system_messages:recruit_window/FORBIDDEN'
+    NOTRECRUIT_WINDOW_SUCCESS = '#system_messages:notrecruit_window/success'
     EQUIP_TANKMAN_SUCCESS = '#system_messages:equip_tankman/success'
     EQUIP_TANKMAN_SERVER_ERROR = '#system_messages:equip_tankman/server_error'
     EQUIP_TANKMAN_INVALID_VEHICLE = '#system_messages:equip_tankman/invalid_vehicle'
@@ -536,6 +537,7 @@ class SYSTEM_MESSAGES(object):
     BATTLEBOOSTER_BUY_VEHICLE_LOCKED = '#system_messages:battleBooster_buy/vehicle_locked'
     BATTLEBOOSTER_BUY_INVALID_VEHICLE = '#system_messages:battleBooster_buy/invalid_vehicle'
     BATTLEBOOSTER_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:battleBooster_buy/error_not_for_this_vehicle_type'
+    MULTIPLESELLING_SUCCESS = '#system_messages:multipleSelling/success'
     SHELL_SELL_SUCCESS = '#system_messages:shell_sell/success'
     SHELL_SELL_INVALID_MODULE = '#system_messages:shell_sell/invalid_module'
     SHELL_SELL_SERVER_ERROR = '#system_messages:shell_sell/server_error'
@@ -760,6 +762,7 @@ class SYSTEM_MESSAGES(object):
     PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_NO_REWARD = '#system_messages:personalMissions/reward/tankwoman/server_error/NO_REWARD'
     PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_INVALID_STATE = '#system_messages:personalMissions/reward/tankwoman/server_error/INVALID_STATE'
     PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_DISABLED = '#system_messages:personalMissions/reward/tankwoman/server_error/DISABLED'
+    PERSONALMISSIONS_TANKMENGAIN = '#system_messages:personalMissions/tankmenGain'
     PERSONALMISSIONS_FREEAWARDLISTGAIN = '#system_messages:personalMissions/freeAwardListGain'
     PERSONALMISSIONS_FREEAWARDLISTRETURN = '#system_messages:personalMissions/freeAwardListReturn'
     PERSONALMISSIONS_PAWN_SUCCESS = '#system_messages:personalMissions/pawn/success'
@@ -1301,6 +1304,7 @@ class SYSTEM_MESSAGES(object):
      RECRUIT_WINDOW_NOT_ENOUGH_SPACE,
      RECRUIT_WINDOW_DISCONNECTED_FROM_CENTER,
      RECRUIT_WINDOW_FORBIDDEN,
+     NOTRECRUIT_WINDOW_SUCCESS,
      EQUIP_TANKMAN_SUCCESS,
      EQUIP_TANKMAN_SERVER_ERROR,
      EQUIP_TANKMAN_INVALID_VEHICLE,
@@ -1560,6 +1564,7 @@ class SYSTEM_MESSAGES(object):
      BATTLEBOOSTER_BUY_VEHICLE_LOCKED,
      BATTLEBOOSTER_BUY_INVALID_VEHICLE,
      BATTLEBOOSTER_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE,
+     MULTIPLESELLING_SUCCESS,
      SHELL_SELL_SUCCESS,
      SHELL_SELL_INVALID_MODULE,
      SHELL_SELL_SERVER_ERROR,
@@ -1784,6 +1789,7 @@ class SYSTEM_MESSAGES(object):
      PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_NO_REWARD,
      PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_INVALID_STATE,
      PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_DISABLED,
+     PERSONALMISSIONS_TANKMENGAIN,
      PERSONALMISSIONS_FREEAWARDLISTGAIN,
      PERSONALMISSIONS_FREEAWARDLISTRETURN,
      PERSONALMISSIONS_PAWN_SUCCESS,

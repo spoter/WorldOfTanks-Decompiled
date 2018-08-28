@@ -6,7 +6,39 @@ class Views(object):
     __slots__ = ()
 
     @property
-    def demoWindow(self):
+    def contextMenuContent(self):
+        pass
+
+    @property
+    def contextMenuWindow(self):
+        pass
+
+    @property
+    def popupWindow(self):
+        pass
+
+    @property
+    def rewardWindowContent(self):
+        pass
+
+    @property
+    def buyVehicleView(self):
+        pass
+
+    @property
+    def standardWindow(self):
+        pass
+
+    @property
+    def backportTooltipContent(self):
+        pass
+
+    @property
+    def simpleTooltipContent(self):
+        pass
+
+    @property
+    def tooltipWindow(self):
         pass
 
     @property
@@ -43,4 +75,8 @@ class Views(object):
 
     @property
     def testUikitView(self):
+        pass
+
+    @property
+    def wtypesDemoWindowContent(self):
         pass

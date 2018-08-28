@@ -194,8 +194,12 @@ class ISoundEventChecker(IGameController):
 
 class IHeroTankController(IGameController):
     onUpdated = None
+    onInteractive = None
 
     def getRandomTankCD(self):
+        raise NotImplementedError
+
+    def setInteractive(self, interactive):
         raise NotImplementedError
 
     def getCurrentTankCD(self):
@@ -303,17 +307,28 @@ class IBrowserController(IGameController):
 
 
 class IPromoController(IGameController):
+    onNewTeaserReceived = None
+    onPromoCountChanged = None
 
-    def showVersionsPatchPromo(self):
+    def isActive(self):
         raise NotImplementedError
 
-    def isPatchPromoAvailable(self):
+    def getPromoCount(self):
         raise NotImplementedError
 
-    def isPatchChanged(self):
+    def showPromo(self, url, handlers=None, source=None):
         raise NotImplementedError
 
-    def showPromo(self, url, title, forced=False, handlers=None):
+    def setNewTeaserData(self, teaserData):
+        raise NotImplementedError
+
+    def showFieldPost(self):
+        raise NotImplementedError
+
+    def showLastTeaserPromo(self):
+        raise NotImplementedError
+
+    def setUnreadPromoCount(self, count):
         raise NotImplementedError
 
 
@@ -358,6 +373,10 @@ class IVehicleComparisonBasket(IGameController):
         raise NotImplementedError
 
     def removeAllVehicles(self):
+        raise NotImplementedError
+
+    @property
+    def maxVehiclesToCompare(self):
         raise NotImplementedError
 
     def isFull(self):
@@ -708,25 +727,31 @@ class IBootcampController(IGameController):
         raise NotImplementedError
 
 
-class IMarathonEventController(IGameController):
+class IMarathonEventsController(IGameController):
     onFlagUpdateNotify = None
 
-    def isEnabled(self):
+    def addMarathon(self, data):
         raise NotImplementedError
 
-    def isAvailable(self):
+    def delMarathon(self, prefix):
         raise NotImplementedError
 
-    def getMarathonFlagState(self, vehicle):
+    def getMarathon(self, prefix):
         raise NotImplementedError
 
-    def checkForWarnings(self, vehicle):
+    def getMarathons(self):
         raise NotImplementedError
 
-    def getState(self):
+    def getPrimaryMarathon(self):
         raise NotImplementedError
 
-    def getMarathonProgress(self):
+    def getFirstAvailableMarathon(self):
+        raise NotImplementedError
+
+    def getPrefix(self, eventID):
+        raise NotImplementedError
+
+    def getVisibleInPostBattleQuests(self):
         raise NotImplementedError
 
     def getQuestsData(self, prefix=None, postfix=None):
@@ -735,22 +760,10 @@ class IMarathonEventController(IGameController):
     def getTokensData(self, prefix=None, postfix=None):
         raise NotImplementedError
 
-    def getMarathonQuests(self):
+    def isAnyAvailable(self):
         raise NotImplementedError
 
-    def getFormattedRemainingTime(self):
-        raise NotImplementedError
-
-    def getExtraDaysToBuy(self):
-        raise NotImplementedError
-
-    def isVehicleObtained(self):
-        raise NotImplementedError
-
-    def getMarathonDiscount(self):
-        raise NotImplementedError
-
-    def getURL(self, callback):
+    def isAnyEnabled(self):
         raise NotImplementedError
 
 

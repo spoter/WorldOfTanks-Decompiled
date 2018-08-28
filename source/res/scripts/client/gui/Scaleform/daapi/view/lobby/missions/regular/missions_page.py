@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_page.py
 from collections import namedtuple
 import BigWorld
-from shared_utils import findFirst
+from gui.marathon.marathon_constants import MARATHONS_DATA
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MISSIONS_PAGE
@@ -17,6 +17,7 @@ from gui.Scaleform.daapi.view.lobby.missions.missions_helper import HIDE_DONE, H
 from gui.Scaleform.daapi.view.lobby.missions.regular import group_packers
 from gui.Scaleform.daapi.view.meta.MissionsPageMeta import MissionsPageMeta
 from gui.Scaleform.daapi.view.meta.MissionsViewBaseMeta import MissionsViewBaseMeta
+from gui.Scaleform.daapi.view.lobby.missions.regular.sound_constants import TASKS_SOUND_SPACE
 from gui.Scaleform.framework.entities.DAAPIDataProvider import ListDAAPIDataProvider
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -33,7 +34,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IMarathonEventController
+from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui.server_events.events_helpers import isLinkedSet
@@ -41,12 +42,15 @@ TabData = namedtuple('TabData', ('alias',
  'linkage',
  'tooltip',
  'tooltipDisabled',
- 'label'))
-TABS_DATA_ORDERED = (TabData(QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_EVENTBOARDS, QUESTS.MISSIONS_TAB_EVENTBOARDS_DISABLED, _ms(QUESTS.MISSIONS_TAB_LABEL_EVENTBOARDS)),
- TabData(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_MARATHONS, QUESTS.MISSIONS_TAB_MARATHONS, _ms(QUESTS.MISSIONS_TAB_LABEL_MARATHONS)),
- TabData(QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_MARATHONS, QUESTS.MISSIONS_TAB_MARATHONS, _ms(QUESTS.MISSIONS_TAB_LABEL_MARATHONS)),
- TabData(QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_CATEGORIES, QUESTS.MISSIONS_TAB_CATEGORIES, _ms(QUESTS.MISSIONS_TAB_LABEL_CATEGORIES)),
- TabData(QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS, QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_CURRENTVEHICLE, QUESTS.MISSIONS_TAB_CURRENTVEHICLE, _ms(QUESTS.MISSIONS_TAB_LABEL_CURRENTVEHICLE)))
+ 'label',
+ 'prefix'))
+TABS_DATA_ORDERED = [TabData(QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_EVENTBOARDS, QUESTS.MISSIONS_TAB_EVENTBOARDS_DISABLED, _ms(QUESTS.MISSIONS_TAB_LABEL_EVENTBOARDS), None),
+ TabData(QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_MARATHONS, QUESTS.MISSIONS_TAB_MARATHONS, _ms(QUESTS.MISSIONS_TAB_LABEL_MARATHONS), None),
+ TabData(QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_CATEGORIES, QUESTS.MISSIONS_TAB_CATEGORIES, _ms(QUESTS.MISSIONS_TAB_LABEL_CATEGORIES), None),
+ TabData(QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS, QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_CURRENTVEHICLE, QUESTS.MISSIONS_TAB_CURRENTVEHICLE, _ms(QUESTS.MISSIONS_TAB_LABEL_CURRENTVEHICLE), None)]
+MARATHONS_START_TAB_INDEX = 1
+for marathonIndex, marathon in enumerate(MARATHONS_DATA, MARATHONS_START_TAB_INDEX):
+    TABS_DATA_ORDERED.insert(marathonIndex, TabData(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_LINKAGE, marathon.tabTooltip, marathon.tabTooltipDisabled, marathon.label, marathon.prefix))
 
 def setHideDoneFilter():
     filterData = {'hideDone': True,
@@ -56,10 +60,11 @@ def setHideDoneFilter():
 
 class MissionsPage(LobbySubView, MissionsPageMeta):
     __sound_env__ = LobbySubViewEnv
+    _COMMON_SOUND_SPACE = TASKS_SOUND_SPACE
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     eventsController = dependency.descriptor(IEventBoardController)
-    marathonCtrl = dependency.descriptor(IMarathonEventController)
+    marathonsCtrl = dependency.descriptor(IMarathonEventsController)
 
     def __init__(self, ctx):
         super(MissionsPage, self).__init__(ctx)
@@ -67,6 +72,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.__filterData = AccountSettings.getFilter(MISSIONS_PAGE)
         self._eventID = None
         self._groupID = None
+        self._marathonPrefix = None
         self.__needToScroll = False
         self._showMissionDetails = True
         self.__builders = {QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS: group_packers.MarathonsDumbFinder(),
@@ -74,17 +80,22 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
          QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS: group_packers.QuestsGroupsFinder(),
          QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS: group_packers.VehicleGroupFinder(),
          QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS: group_packers.ElenGroupsFinder()}
+        self.__currentTabAlias = None
         self._initialize(ctx)
         return
 
-    def onTabSelected(self, alias):
+    def onTabSelected(self, alias, prefix):
         self.__currentTabAlias = alias
+        self._marathonPrefix = prefix
         caches.getNavInfo().setMissionsTab(alias)
+        caches.getNavInfo().setMarathonPrefix(prefix)
         if self.currentTab and self.__currentTabAlias != QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS:
             self.__updateFilterLabel()
             self.currentTab.setFilters(self.__filterData)
         self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx=alias), EVENT_BUS_SCOPE.LOBBY)
         self.showFilter()
+        if alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS:
+            self.currentTab.setMarathon(prefix)
         if self.currentTab:
             self.currentTab.setActive(True)
 
@@ -116,12 +127,10 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         self.addListener(MissionsEvent.PAGE_INVALIDATE, self.__pageInvalidate, EVENT_BUS_SCOPE.LOBBY)
         self.eventsCache.onEventsVisited += self.__onEventsVisited
         g_currentVehicle.onChanged += self.__updateHeader
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self.__updateHeader()
         self.__tryOpenMissionDetails()
         self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_ACTIVATE), EVENT_BUS_SCOPE.LOBBY)
-
-    def __pageInvalidate(self, _):
-        self._invalidate()
 
     def _invalidate(self, ctx=None):
         super(MissionsPage, self)._invalidate(ctx)
@@ -133,12 +142,18 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
 
     def _dispose(self):
         super(MissionsPage, self)._dispose()
+        for builder in self.__builders.itervalues():
+            builder.clear()
+
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         g_currentVehicle.onChanged -= self.__updateHeader
         self.removeListener(MissionsEvent.ON_GROUPS_DATA_CHANGED, self.__onPageUpdate, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(MissionsEvent.ON_FILTER_CHANGED, self.__onFilterChanged, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(MissionsEvent.ON_FILTER_CLOSED, self.__onFilterClosed, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(MissionsEvent.PAGE_INVALIDATE, self.__pageInvalidate, EVENT_BUS_SCOPE.LOBBY)
         self.eventsCache.onEventsVisited -= self.__onEventsVisited
         caches.getNavInfo().setMissionsTab(self.__currentTabAlias)
+        caches.getNavInfo().setMarathonPrefix(self._marathonPrefix)
         self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_DEACTIVATE), EVENT_BUS_SCOPE.LOBBY)
 
     def _onRegisterFlashComponent(self, viewPy, alias):
@@ -147,26 +162,39 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
 
     def _initialize(self, ctx=None):
         ctx = ctx or {}
-        self.__currentTabAlias = ctx.get('tab') or caches.getNavInfo().getMissionsTab()
-        elenEnabled = self.lobbyContext.getServerSettings().isElenEnabled()
-        if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS:
-            if not elenEnabled or not self.eventsController.hasEvents():
+        requestedTab = ctx.get('tab')
+        if requestedTab:
+            self.__currentTabAlias = requestedTab
+        else:
+            elenEnabled = self.lobbyContext.getServerSettings().isElenEnabled()
+            self.__currentTabAlias = caches.getNavInfo().getMissionsTab()
+            self._marathonPrefix = ctx.get('marathonPrefix') or caches.getNavInfo().getMarathonPrefix()
+            if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and (not elenEnabled or not self.eventsController.hasEvents()):
                 self.__currentTabAlias = None
-        if not self.__currentTabAlias:
-            if elenEnabled and self.eventsController.hasEvents():
-                self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS
-            elif findFirst(lambda group: group.isMarathon(), self.eventsCache.getGroups().itervalues()):
-                self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS
-            else:
-                self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS
+            if not self.__currentTabAlias:
+                if elenEnabled and self.eventsController.hasEvents():
+                    self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS
+                elif self.marathonsCtrl.isAnyAvailable():
+                    self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS
+                    self._marathonPrefix = self.marathonsCtrl.getFirstAvailableMarathon().prefix
+                else:
+                    self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS
         self._eventID = ctx.get('eventID')
         self._groupID = ctx.get('groupID')
         self._showMissionDetails = ctx.get('showMissionDetails', True)
         self.__needToScroll = self._groupID is not None
         self.__scrollToGroup()
         caches.getNavInfo().setMissionsTab(self.__currentTabAlias)
+        caches.getNavInfo().setMarathonPrefix(self._marathonPrefix)
+        if 'marathonPostfix' in ctx.keys() and 'marathonPrefix' in ctx.keys():
+            mafon = self.marathonsCtrl.getMarathon(ctx['marathonPrefix'])
+            if mafon:
+                mafon.showOnce(ctx['marathonPostfix'])
         self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx=self.__currentTabAlias), EVENT_BUS_SCOPE.LOBBY)
         return
+
+    def __pageInvalidate(self, _):
+        self._invalidate()
 
     def __scrollToGroup(self):
         if self._eventID and self._groupID and self.__needToScroll and self.currentTab is not None:
@@ -210,10 +238,16 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         if self.__filterApplied():
             self.as_blinkFilterCounterS()
 
+    def __onServerSettingChanged(self, diff):
+        if 'marathonSettings' in diff:
+            self.__updateHeader()
+
     def __updateHeader(self):
         data = []
         tabs = []
+        marathonEvent = None
         isElenEnabled = self.lobbyContext.getServerSettings().isElenEnabled()
+        isMarathonEnabled = self.lobbyContext.getServerSettings().isMarathonEnabled()
         for tabData in TABS_DATA_ORDERED:
             alias = tabData.alias
             tab = {'label': tabData.label,
@@ -221,21 +255,27 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             header_tab = {'alias': alias,
              'linkage': tabData.linkage,
              'tooltip': tabData.tooltip}
-            if alias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and (not self.eventsController.hasEvents() or not isElenEnabled) or alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS and not self.marathonCtrl.isEnabled() or alias == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS and self.marathonCtrl.isEnabled():
-                if alias == self.__currentTabAlias:
+            if alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS:
+                marathonEvent = self.marathonsCtrl.getMarathon(tabData.prefix)
+                tab['prefix'] = tabData.prefix
+                header_tab['prefix'] = tabData.prefix
+            if alias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and not (isElenEnabled and self.eventsController.hasEvents()) or alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS and not (marathonEvent and marathonEvent.isEnabled()) or alias == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS and self.marathonsCtrl.isAnyEnabled():
+                if alias == self.__currentTabAlias and marathonEvent and marathonEvent.prefix == self._marathonPrefix:
                     self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS
                 continue
             if alias == self.__currentTabAlias:
-                header_tab['selected'] = True
+                if alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS and self._marathonPrefix:
+                    header_tab['selected'] = self._marathonPrefix == tabData.prefix
+                else:
+                    header_tab['selected'] = True
             if alias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and not isElenEnabled:
                 header_tab['tooltip'] = tabData.tooltipDisabled
                 header_tab['enabled'] = False
+            if alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS and not isMarathonEnabled:
+                header_tab['tooltip'] = tabData.tooltipDisabled
             if alias == QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS:
                 vehicle = g_currentVehicle.item
-                if vehicle:
-                    vehName = vehicle.shortUserName
-                else:
-                    vehName = ''
+                vehName = vehicle.shortUserName if vehicle else ''
                 tab['label'] = tabData.label % {'vehName': vehName}
             if alias in (QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS):
                 if self.currentTab is not None and self.__currentTabAlias == alias:

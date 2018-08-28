@@ -2128,7 +2128,16 @@
         </palette>
       </palettes>
       <tiling>
-        <Pl08_Czolg_T_wz51>	1.52162 1.52162 0.000000 0.000000	</Pl08_Czolg_T_wz51>
+        <Pl01_TKS_20mm>	3 3 0.000000 0.000000	</Pl01_TKS_20mm>
+        <Pl08_50TP_prototyp>	1.52162 1.52162 0.000000 0.000000	</Pl08_50TP_prototyp>
+        <Pl05_50TP_Tyszkiewicza>	2 2 0.000000 0.000000	</Pl05_50TP_Tyszkiewicza>
+        <Pl15_60TP_Lewandowskiego>	1.30 1.30 0.000000 0.000000	</Pl15_60TP_Lewandowskiego>
+        <Pl11_45TP_Habicha>	1.0 1.0 0.000000 0.000000	</Pl11_45TP_Habicha>
+        <Pl13_53TP_Markowskiego>	2.02 2.02 0.000000 0.000000	</Pl13_53TP_Markowskiego>
+        <Pl14_4TP>	2.0 2.0 0.000000 0.000000	</Pl14_4TP>
+        <Pl10_40TP_Habicha>	1.84 1.84 0.000000 0.000000	</Pl10_40TP_Habicha>
+        <Pl07_14TP>	3.90 3.90 0.000000 0.000000	</Pl07_14TP>
+        <Pl12_25TP_KSUST_II>	3.0 3.0 0.000000 0.000000	</Pl12_25TP_KSUST_II>
       </tiling>
     </camouflage>
     <camouflage>
@@ -2146,7 +2155,16 @@
         </palette>
       </palettes>
       <tiling>
-        <Pl08_Czolg_T_wz51>	1.99189 1.99189 5.09481 3.50649	</Pl08_Czolg_T_wz51>
+        <Pl01_TKS_20mm>	3.5 3.5 0.000000 0.000000	</Pl01_TKS_20mm>
+        <Pl08_50TP_prototyp>	1.99189 1.99189 5.09481 3.50649	</Pl08_50TP_prototyp>
+        <Pl05_50TP_Tyszkiewicza>	2.5 2.5 0.000000 0.000000	</Pl05_50TP_Tyszkiewicza>
+        <Pl15_60TP_Lewandowskiego>	1.35 1.35 0.000000 0.000000	</Pl15_60TP_Lewandowskiego>
+        <Pl11_45TP_Habicha>	1.5 1.5 0.000000 0.000000	</Pl11_45TP_Habicha>
+        <Pl13_53TP_Markowskiego>	1.78 1.78 0.000000 0.000000	</Pl13_53TP_Markowskiego>
+        <Pl14_4TP>	2.0 2.0 0.000000 0.000000	</Pl14_4TP>
+        <Pl10_40TP_Habicha>	1.71 1.71 0.000000 0.000000	</Pl10_40TP_Habicha>
+        <Pl07_14TP>	3.22 3.22 0.000000 0.000000	</Pl07_14TP>
+        <Pl12_25TP_KSUST_II>	3.0 3.0 0.000000 0.000000	</Pl12_25TP_KSUST_II>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -2178,7 +2196,17 @@
           <c3>	72 78 45 255	</c3>
         </palette>
       </palettes>
-      <tiling></tiling>
+      <tiling>
+        <Pl01_TKS_20mm>	2.8 2.8 0.46 0.21	</Pl01_TKS_20mm>
+        <Pl05_50TP_Tyszkiewicza>	2 2 0.000000 0.000000	</Pl05_50TP_Tyszkiewicza>
+        <Pl15_60TP_Lewandowskiego>	1.34 1.34 0.000000 0.000000	</Pl15_60TP_Lewandowskiego>
+        <Pl11_45TP_Habicha>	1.34 1.34 0.000000 0.000000	</Pl11_45TP_Habicha>
+        <Pl13_53TP_Markowskiego>	1.14 1.14 0.000000 0.000000	</Pl13_53TP_Markowskiego>
+        <Pl14_4TP>	2.0 2.0 0.000000 0.000000	</Pl14_4TP>
+        <Pl10_40TP_Habicha>	1.85 1.85 0.000000 0.000000	</Pl10_40TP_Habicha>
+        <Pl07_14TP>	2.75 2.75 0.000000 0.000000	</Pl07_14TP>
+        <Pl12_25TP_KSUST_II>	2.0 2.0 0.000000 0.000000	</Pl12_25TP_KSUST_II>
+      </tiling>
     </camouflage>
   </itemGroup>
   <itemGroup>
@@ -2209,7 +2237,17 @@
           <c3>	98 82 55 255	</c3>
         </palette>
       </palettes>
-      <tiling></tiling>
+      <tiling>
+        <Pl01_TKS_20mm>	2.2 2.2 0.18 0.000000	</Pl01_TKS_20mm>
+        <Pl05_50TP_Tyszkiewicza>	2 2 0.000000 0.000000	</Pl05_50TP_Tyszkiewicza>
+        <Pl15_60TP_Lewandowskiego>	1.21 1.21 0.000000 0.000000	</Pl15_60TP_Lewandowskiego>
+        <Pl11_45TP_Habicha>	1.3 1.3 0.000000 0.000000	</Pl11_45TP_Habicha>
+        <Pl13_53TP_Markowskiego>	1.34 1.34 0.000000 0.000000	</Pl13_53TP_Markowskiego>
+        <Pl14_4TP>	1.7 1.7 0.000000 0.000000	</Pl14_4TP>
+        <Pl10_40TP_Habicha>	1.37 1.37 0.89 0.000000	</Pl10_40TP_Habicha>
+        <Pl07_14TP>	2.88 2.88 0.0 0.000000	</Pl07_14TP>
+        <Pl12_25TP_KSUST_II>	2.2 2.2 0.0 0.000000	</Pl12_25TP_KSUST_II>
+      </tiling>
     </camouflage>
     <camouflage>
       <id>	15907	</id>
@@ -2225,7 +2263,17 @@
           <c3>	0 0 0 0	</c3>
         </palette>
       </palettes>
-      <tiling></tiling>
+      <tiling>
+        <Pl01_TKS_20mm>	3 3 0.000000 0.000000	</Pl01_TKS_20mm>
+        <Pl05_50TP_Tyszkiewicza>	3 2 0.000000 0.000000	</Pl05_50TP_Tyszkiewicza>
+        <Pl15_60TP_Lewandowskiego>	1.21 1.21 0.000000 0.000000	</Pl15_60TP_Lewandowskiego>
+        <Pl11_45TP_Habicha>	1.0 1.0 0.000000 0.000000	</Pl11_45TP_Habicha>
+        <Pl13_53TP_Markowskiego>	1.89 1.89 0.000000 0.000000	</Pl13_53TP_Markowskiego>
+        <Pl14_4TP>	1.8 1.8 0.000000 0.000000	</Pl14_4TP>
+        <Pl10_40TP_Habicha>	1.51 1.51 0.000000 0.000000	</Pl10_40TP_Habicha>
+        <Pl07_14TP>	2.40 2.40 0.000000 0.000000	</Pl07_14TP>
+        <Pl12_25TP_KSUST_II>	2.0 2.0 0.000000 0.000000	</Pl12_25TP_KSUST_II>
+      </tiling>
     </camouflage>
   </itemGroup>
   <itemGroup>
@@ -2494,6 +2542,8 @@
         </palette>
       </palettes>
       <tiling>
+        <GB97_Chimera>	4.97 4.97 0.000000 0.000000	</GB97_Chimera>
+        <GB96_Excalibur>	2.32 2.32 0.000000 0.000000	</GB96_Excalibur>
         <GB01_Medium_Mark_I>	4.6 4.6 0.000000 0.000000	</GB01_Medium_Mark_I>
         <GB03_Cruiser_Mk_I>	5.2 5.2 0.000000 0.000000	</GB03_Cruiser_Mk_I>
         <GB04_Valentine>	3.2 3.3 0.3 0.000000	</GB04_Valentine>
@@ -2520,7 +2570,7 @@
         <GB27_Sexton>	4.7 4.7 0.28 0.000000	</GB27_Sexton>
         <GB28_Bishop>	5.2 5.2 0.2 0.000000	</GB28_Bishop>
         <GB29_Crusader_5inch>	3 3 0.4 0.000000	</GB29_Crusader_5inch>
-        <GB30_FV3805>	3 3.1 0.000000 0.000000	</GB30_FV3805>
+        <GB30_FV3805>	1.75676 1.75676 0.000000 0.000000	</GB30_FV3805>
         <GB31_Conqueror_Gun>	3 3.1 0.000000 0.000000	</GB31_Conqueror_Gun>
         <GB32_Tortoise>	3.8 3.8 0.5 0.68	</GB32_Tortoise>
         <GB39_Universal_CarrierQF2>	4.3 4.3 0.16 0.000000	</GB39_Universal_CarrierQF2>
@@ -2589,6 +2639,8 @@
         </palette>
       </palettes>
       <tiling>
+        <GB97_Chimera>	5.77 5.77 0.0 0.000000	</GB97_Chimera>
+        <GB96_Excalibur>	3.77 3.77 0.0 0.000000	</GB96_Excalibur>
         <GB01_Medium_Mark_I>	6.6 6.6 2.1 0.000000	</GB01_Medium_Mark_I>
         <GB03_Cruiser_Mk_I>	6.8 6.8 0.000000 0.000000	</GB03_Cruiser_Mk_I>
         <GB04_Valentine>	5 5 0.000000 0.000000	</GB04_Valentine>
@@ -2606,7 +2658,7 @@
         <GB17_Grant_I>	3.6 3.6 0.2 0.1	</GB17_Grant_I>
         <GB19_Sherman_Firefly>	5 5 0.000000 0.000000	</GB19_Sherman_Firefly>
         <GB20_Crusader>	5 5 0.000000 0.000000	</GB20_Crusader>
-        <GB21_Cromwell>	5 5 0.000000 0.000000	</GB21_Cromwell>
+        <GB21_Cromwell>	2.56757 2.56757 0.000000 0.000000	</GB21_Cromwell>
         <GB22_Comet>	2.6 2.6 0.000000 0.000000	</GB22_Comet>
         <GB23_Centurion>	7.3 7.3 0.000000 0.000000	</GB23_Centurion>
         <GB24_Centurion_Mk3>	5 5 0.48 0.5	</GB24_Centurion_Mk3>
@@ -2615,7 +2667,7 @@
         <GB27_Sexton>	4.2 4.2 0.000000 0.000000	</GB27_Sexton>
         <GB28_Bishop>	6.6 6.6 0.000000 0.000000	</GB28_Bishop>
         <GB29_Crusader_5inch>	5 5 0.000000 0.000000	</GB29_Crusader_5inch>
-        <GB30_FV3805>	5 5 0.000000 0.000000	</GB30_FV3805>
+        <GB30_FV3805>	2.02703 2.02703 0.000000 0.000000	</GB30_FV3805>
         <GB31_Conqueror_Gun>	5 5 0.000000 0.000000	</GB31_Conqueror_Gun>
         <GB32_Tortoise>	5 5 0.000000 0.1	</GB32_Tortoise>
         <GB39_Universal_CarrierQF2>	5 5 0.000000 0.000000	</GB39_Universal_CarrierQF2>
@@ -2641,7 +2693,7 @@
         <GB78_Sexton_I>	5 5 0.000000 0.000000	</GB78_Sexton_I>
         <GB79_FV206>	4 4 0.000000 4.2	</GB79_FV206>
         <GB11_Caernarvon_IGR>	5 5 0.000000 0.000000	</GB11_Caernarvon_IGR>
-        <GB21_Cromwell_IGR>	5 5 0.000000 0.000000	</GB21_Cromwell_IGR>
+        <GB21_Cromwell_IGR>	3.64865 3.64865 0.000000 0.000000	</GB21_Cromwell_IGR>
         <GB23_Centurion_IGR>	7.3 7.3 0.000000 0.000000	</GB23_Centurion_IGR>
         <GB77_FV304_IGR>	6.1 6.1 0.000000 0.000000	</GB77_FV304_IGR>
         <GB08_Churchill_I_IGR>	3 3 0.000000 0.000000	</GB08_Churchill_I_IGR>
@@ -2698,6 +2750,8 @@
         </palette>
       </palettes>
       <tiling>
+        <GB97_Chimera>	5.37 5.37 0.000000 0.000000	</GB97_Chimera>
+        <GB96_Excalibur>	2.40 2.40 0.000000 0.000000	</GB96_Excalibur>
         <GB01_Medium_Mark_I>	5.6 5.6 0.000000 0.000000	</GB01_Medium_Mark_I>
         <GB03_Cruiser_Mk_I>	4.6 4.6 0.000000 0.000000	</GB03_Cruiser_Mk_I>
         <GB04_Valentine>	2.9 3 0.000000 0.000000	</GB04_Valentine>
@@ -2724,7 +2778,7 @@
         <GB27_Sexton>	3.2 3.2 0.000000 0.000000	</GB27_Sexton>
         <GB28_Bishop>	5.2 5.2 0.000000 0.000000	</GB28_Bishop>
         <GB29_Crusader_5inch>	3 3 0.000000 0.000000	</GB29_Crusader_5inch>
-        <GB30_FV3805>	3 3.1 0.000000 0.000000	</GB30_FV3805>
+        <GB30_FV3805>	1.75676 1.75676 0.000000 0.000000	</GB30_FV3805>
         <GB31_Conqueror_Gun>	3 3.1 0.000000 0.000000	</GB31_Conqueror_Gun>
         <GB32_Tortoise>	3.4 3.4 0.000000 0.000000	</GB32_Tortoise>
         <GB39_Universal_CarrierQF2>	3 3.1 0.000000 0.000000	</GB39_Universal_CarrierQF2>
@@ -2807,6 +2861,8 @@
         </palette>
       </palettes>
       <tiling>
+        <GB97_Chimera>	4.82 4.82 6.07 0.000000	</GB97_Chimera>
+        <GB96_Excalibur>	2.33 2.33 0.0 0.000000	</GB96_Excalibur>
         <GB01_Medium_Mark_I>	3.1 3.1 2.1 0.000000	</GB01_Medium_Mark_I>
         <GB03_Cruiser_Mk_I>	3.5 3.5 0.000000 0.000000	</GB03_Cruiser_Mk_I>
         <GB04_Valentine>	2.7 2.8 0.000000 0.000000	</GB04_Valentine>
@@ -2833,7 +2889,7 @@
         <GB27_Sexton>	3.7 3.7 0.000000 0.000000	</GB27_Sexton>
         <GB28_Bishop>	5.4 5.4 0.000000 0.000000	</GB28_Bishop>
         <GB29_Crusader_5inch>	3 3 0.000000 0.000000	</GB29_Crusader_5inch>
-        <GB30_FV3805>	3 3.1 0.000000 0.000000	</GB30_FV3805>
+        <GB30_FV3805>	1.62162 1.62162 0.000000 0.000000	</GB30_FV3805>
         <GB31_Conqueror_Gun>	3 3.1 0.000000 0.000000	</GB31_Conqueror_Gun>
         <GB32_Tortoise>	4.6 4.6 0.000000 0.000000	</GB32_Tortoise>
         <GB39_Universal_CarrierQF2>	3 3 0.000000 0.000000	</GB39_Universal_CarrierQF2>
@@ -2903,6 +2959,8 @@
         </palette>
       </palettes>
       <tiling>
+        <GB97_Chimera>	5.52 5.52 0.000000 0.000000	</GB97_Chimera>
+        <GB96_Excalibur>	2.47 2.47 0.000000 0.000000	</GB96_Excalibur>
         <GB01_Medium_Mark_I>	7.3 7.3 0.000000 0.000000	</GB01_Medium_Mark_I>
         <GB03_Cruiser_Mk_I>	6.6 6.6 0.000000 0.000000	</GB03_Cruiser_Mk_I>
         <GB04_Valentine>	5 5 0.000000 0.000000	</GB04_Valentine>
@@ -2929,7 +2987,7 @@
         <GB27_Sexton>	5 5 0.000000 0.000000	</GB27_Sexton>
         <GB28_Bishop>	7.6 7.6 0.000000 0.000000	</GB28_Bishop>
         <GB29_Crusader_5inch>	5 5 0.000000 0.000000	</GB29_Crusader_5inch>
-        <GB30_FV3805>	5 5 0.000000 0.000000	</GB30_FV3805>
+        <GB30_FV3805>	1.75676 1.75676 0.000000 0.000000	</GB30_FV3805>
         <GB31_Conqueror_Gun>	5 5 0.000000 0.000000	</GB31_Conqueror_Gun>
         <GB32_Tortoise>	5 5 0.000000 0.000000	</GB32_Tortoise>
         <GB39_Universal_CarrierQF2>	5 5 0.000000 0.000000	</GB39_Universal_CarrierQF2>
@@ -3764,6 +3822,8 @@
         <R122_T44_100B>	5.9 5.9 0.000000 0.83	</R122_T44_100B>
         <R112_T54_45>	4.9 4.9 0.000000 0.000000	</R112_T54_45>
         <R127_T44_100_P>	5.9 5.9 0.000000 0.83	</R127_T44_100_P>
+        <R127_T44_100_U>	5.9 5.9 0.000000 0.83	</R127_T44_100_U>
+        <R127_T44_100_K>	5.9 5.9 0.000000 0.83	</R127_T44_100_K>
         <R123_Kirovets_1>	2.6 2.6 0.000000 0.000000	</R123_Kirovets_1>
         <R128_KV4_Kreslavskiy>	3.2 3.2 0.000000 0.000000	</R128_KV4_Kreslavskiy>
         <R126_Object_730_5>	2.3 2.3 0.000000 0.000000	</R126_Object_730_5>
@@ -3787,6 +3847,8 @@
         <R144_K_91>	3 3 0.000000 0.000000	</R144_K_91>
         <R154_T_34E_1943>	1.41081 1.41081 0.98961 1.08961	</R154_T_34E_1943>
         <R155_Object_277>	4.32432 4.32432 0.000000 0.000000	</R155_Object_277>
+        <R156_IS_2M>	1.79 1.79 0.000000 0.000000	</R156_IS_2M>
+        <R157_Object_279R>	2.4 2.4 0.000000 0.000000	</R157_Object_279R>
       </tiling>
     </camouflage>
     <camouflage>
@@ -3924,6 +3986,8 @@
         <R122_T44_100B>	5.2 5.2 0.6 0.6	</R122_T44_100B>
         <R99_T44_122>	6 6 0.000000 0.000000	</R99_T44_122>
         <R127_T44_100_P>	5.2 5.2 0.6 0.6	</R127_T44_100_P>
+        <R127_T44_100_U>	5.2 5.2 0.6 0.6	</R127_T44_100_U>
+        <R127_T44_100_K>	5.2 5.2 0.6 0.6	</R127_T44_100_K>
         <R123_Kirovets_1>	3.2 3.2 0.000000 0.000000	</R123_Kirovets_1>
         <R128_KV4_Kreslavskiy>	3.2 3.2 0.000000 0.000000	</R128_KV4_Kreslavskiy>
         <R126_Object_730_5>	2.4 2.4 1.2 2.1	</R126_Object_730_5>
@@ -3947,6 +4011,8 @@
         <R144_K_91>	3 3 0.000000 0.000000	</R144_K_91>
         <R154_T_34E_1943>	2.24595 2.24595 0.000000 0.3	</R154_T_34E_1943>
         <R155_Object_277>	6.08108 6.08108 0.000000 0.000000	</R155_Object_277>
+        <R156_IS_2M>	1.93 1.93 0.000000 0.000000	</R156_IS_2M>
+        <R157_Object_279R>	2.1 2.1 0.000000 0.000000	</R157_Object_279R>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -4099,6 +4165,8 @@
         <R122_T44_100>	6.9 6.9 0.16 0.46	</R122_T44_100>
         <R122_T44_100B>	6.5 6.5 0.16 0.54	</R122_T44_100B>
         <R127_T44_100_P>	6.5 6.5 0.16 0.54	</R127_T44_100_P>
+        <R127_T44_100_U>	6.5 6.5 0.16 0.54	</R127_T44_100_U>
+        <R127_T44_100_K>	6.5 6.5 0.16 0.54	</R127_T44_100_K>
         <R123_Kirovets_1>	1.7 1.7 0.000000 0.000000	</R123_Kirovets_1>
         <R128_KV4_Kreslavskiy>	3 3 0.000000 0.000000	</R128_KV4_Kreslavskiy>
         <R126_Object_730_5>	1.9 1.9 0.000000 0.000000	</R126_Object_730_5>
@@ -4120,6 +4188,8 @@
         <R144_K_91>	3 3 0.000000 0.000000	</R144_K_91>
         <R154_T_34E_1943>	2.6 2.6 0.000000 0.000000	</R154_T_34E_1943>
         <R155_Object_277>	5 5 0.000000 0.000000	</R155_Object_277>
+        <R156_IS_2M>	2.68 2.68 0.000000 0.000000	</R156_IS_2M>
+        <R157_Object_279R>	2.0 2.0 0.000000 0.000000	</R157_Object_279R>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -4272,6 +4342,8 @@
         <R122_T44_100>	6.4 6.4 0.26 0.000000	</R122_T44_100>
         <R122_T44_100B>	6 6 0.26 0.06	</R122_T44_100B>
         <R127_T44_100_P>	6 6 0.26 0.06	</R127_T44_100_P>
+        <R127_T44_100_U>	6 6 0.26 0.06	</R127_T44_100_U>
+        <R127_T44_100_K>	6 6 0.26 0.06	</R127_T44_100_K>
         <R123_Kirovets_1>	2.3 2.3 0.000000 0.000000	</R123_Kirovets_1>
         <R128_KV4_Kreslavskiy>	3.6 3.6 0.000000 0.000000	</R128_KV4_Kreslavskiy>
         <R126_Object_730_5>	1.6 1.6 0.000000 0.000000	</R126_Object_730_5>
@@ -4294,6 +4366,8 @@
         <R144_K_91>	3 3 0.000000 0.000000	</R144_K_91>
         <R154_T_34E_1943>	2.12162 2.12162 1.07922 0.8	</R154_T_34E_1943>
         <R155_Object_277>	5 5 0.000000 0.000000	</R155_Object_277>
+        <R156_IS_2M>	1.55 1.55 0.000000 0.000000	</R156_IS_2M>
+        <R157_Object_279R>	2.0 2.0 0.000000 0.000000	</R157_Object_279R>
       </tiling>
     </camouflage>
     <camouflage>
@@ -4431,6 +4505,8 @@
         <R99_T44_122>	4.3 4.3 0.000000 0.000000	</R99_T44_122>
         <R61_Object252>	7 7 0.000000 0.000000	</R61_Object252>
         <R127_T44_100_P>	7.1 7.1 0.62 0.26	</R127_T44_100_P>
+        <R127_T44_100_U>	7.1 7.1 0.62 0.26	</R127_T44_100_U>
+        <R127_T44_100_K>	7.1 7.1 0.62 0.26	</R127_T44_100_K>
         <R123_Kirovets_1>	3.2 3.2 0.000000 0.000000	</R123_Kirovets_1>
         <R128_KV4_Kreslavskiy>	3 3 0.000000 0.000000	</R128_KV4_Kreslavskiy>
         <R126_Object_730_5>	1.8 1.8 0.000000 0.000000	</R126_Object_730_5>
@@ -4452,6 +4528,8 @@
         <R144_K_91>	3 3 0.000000 0.000000	</R144_K_91>
         <R154_T_34E_1943>	2 2 0.3 0.4	</R154_T_34E_1943>
         <R155_Object_277>	4.32432 4.32432 0.000000 0.000000	</R155_Object_277>
+        <R156_IS_2M>	1.54 1.54 0.000000 0.000000	</R156_IS_2M>
+        <R157_Object_279R>	2.2 2.2 0.000000 0.000000	</R157_Object_279R>
       </tiling>
     </camouflage>
   </itemGroup>

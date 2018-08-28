@@ -300,7 +300,7 @@ def onDisconnected():
     ServicesLocator.soundCtrl.stop(isDisconnected=True)
     ServicesLocator.gameState.onDisconnected()
     ServicesLocator.webCtrl.stop()
-    ServicesLocator.eventsCache.personalMissions.stop()
+    ServicesLocator.eventsCache.getPersonalMissions().stop()
     g_wgncProvider.clear()
     ServicesLocator.clear()
     UsersInfoHelper.clear()

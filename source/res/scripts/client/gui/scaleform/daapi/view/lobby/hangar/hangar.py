@@ -3,20 +3,21 @@
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from constants import QUEUE_TYPE, PREBATTLE_TYPE
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.HangarMeta import HangarMeta
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
 from gui.Scaleform.framework import ViewTypes
-from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.entities.View import CommonSoundSpaceSettings
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS as customizationSounds
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
+from gui.promo.hangar_teaser_widget import TeaserViewer
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.events import LobbySimpleEvent
@@ -27,7 +28,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController
+from skeletons.gui.game_control import IRankedBattlesController, IEpicBattleMetaGameController, IPromoController
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -38,11 +39,12 @@ from skeletons.helpers.statistics import IStatisticsCollector
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 import BigWorld
 from HeroTank import HeroTank
+from gui.game_control.links import URLMarcos
 
 class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     __background_alpha__ = 0.0
     __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={customizationSounds.STATE_PLACE: customizationSounds.STATE_PLACE_GARAGE,
-     STATE_HANGAR_FILTERED: '{}_off'.format(STATE_HANGAR_FILTERED)}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)
+     STATE_HANGAR_FILTERED: '{}_off'.format(STATE_HANGAR_FILTERED)}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
     rankedController = dependency.descriptor(IRankedBattlesController)
     epicSkillsController = dependency.descriptor(IEpicBattleMetaGameController)
     itemsCache = dependency.descriptor(IItemsCache)
@@ -51,6 +53,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     statsCollector = dependency.descriptor(IStatisticsCollector)
     _settingsCore = dependency.descriptor(ISettingsCore)
     hangarSpace = dependency.descriptor(IHangarSpace)
+    _promoController = dependency.descriptor(IPromoController)
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 
     def __init__(self, _=None):
@@ -59,12 +62,22 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__isSpaceReadyForC11n = False
         self.__isVehicleReadyForC11n = False
         self.__isVehicleCameraReadyForC11n = False
+        self.__urlMacros = URLMarcos()
+        self.__teaser = None
         return
 
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
         if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}):
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def hideTeaser(self):
+        self.__teaser.stop(byUser=True)
+        self.__teaser = None
+        return
+
+    def onTeaserClick(self):
+        self._promoController.showLastTeaserPromo()
 
     def showHelpLayout(self):
         containerManager = self.app.containerManager
@@ -98,6 +111,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.rankedController.onPrimeTimeStatusUpdated += self.__onRankedPrimeStatusUpdate
         self.epicSkillsController.onUpdated += self.__onEpicSkillsUpdate
         self.epicSkillsController.onPrimeTimeStatusUpdated += self.__onEpicSkillsUpdate
+        self._promoController.onNewTeaserReceived += self.__onTeaserReceived
         self.hangarSpace.setVehicleSelectable(True)
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
@@ -128,6 +142,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.rankedController.onPrimeTimeStatusUpdated -= self.__onRankedPrimeStatusUpdate
         self.epicSkillsController.onUpdated -= self.__onEpicSkillsUpdate
         self.epicSkillsController.onPrimeTimeStatusUpdated -= self.__onEpicSkillsUpdate
+        self._promoController.onNewTeaserReceived -= self.__onTeaserReceived
+        if self.__teaser is not None:
+            self.__teaser.stop()
+            self.__teaser = None
         self.hangarSpace.setVehicleSelectable(False)
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
         self._settingsCore.onSettingsChanged -= self.__onSettingsChanged
@@ -135,6 +153,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.closeHelpLayout()
         self.stopGlobalListening()
         LobbySelectableView._dispose(self)
+        return
 
     def __onViewAddedToContainer(self, _, pyEntity):
         self.closeHelpLayout()
@@ -227,6 +246,12 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
                     shared_events.showHeroTankPreview(descriptor.type.compactDescr)
         self.__checkVehicleCameraState()
         self.__updateState()
+        return
+
+    def __onTeaserReceived(self, teaserData, showCallback, closeCallback):
+        if self.__teaser is None:
+            self.__teaser = TeaserViewer(self, showCallback, closeCallback)
+        self.__teaser.show(teaserData, self._promoController.getPromoCount())
         return
 
     def _highlight3DEntityAndShowTT(self, entity):

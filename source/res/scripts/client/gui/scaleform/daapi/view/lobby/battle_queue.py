@@ -273,7 +273,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         self.__timerCallback = BigWorld.callback(1, self.__updateTimer)
         textLabel = text_styles.main(makeString(MENU.PREBATTLE_TIMERLABEL))
         timeLabel = '%d:%02d' % divmod(self.__createTime, 60)
-        if self.__provider.needAdditionalInfo():
+        if self.__provider is not None and self.__provider.needAdditionalInfo():
             timeLabel = text_styles.concatStylesToSingleLine(timeLabel, '*')
         self.as_setTimerS(textLabel, timeLabel)
         self.__createTime += 1
@@ -324,7 +324,7 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
         self.__showBattleRoom()
 
     def onUnitFlagsChanged(self, flags, timeLeft):
-        if not self.prbEntity.hasLockedState():
+        if not self.prbEntity.canShowStrongholdsBattleQueue():
             self.__showBattleRoom()
 
     def onUpdateHeader(self, header, isFirstBattle, isUnitFreezed):

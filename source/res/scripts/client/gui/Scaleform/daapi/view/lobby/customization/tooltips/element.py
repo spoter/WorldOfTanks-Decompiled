@@ -14,6 +14,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.customization.packers import pickPacker
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_TAGS
 from gui.shared.items_parameters import params_helper, formatters as params_formatters
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
@@ -24,7 +25,6 @@ from items.components.c11n_constants import SeasonType
 from items.vehicles import VEHICLE_CLASS_TAGS
 from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
-from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
@@ -96,15 +96,20 @@ class ElementTooltip(BlocksTooltipData):
         self._setMargins(afterBlock=14)
         self._setWidth(387)
         self._item = None
-        self._isQuestReward = False
+        self._isShowPrice = True
+        self._specialArgs = None
         return
 
     def _packBlocks(self, *args):
-        itemIntCD = first(args)
-        if len(args) == 1:
-            self._isQuestReward = False
+        itemIntCD = int(args[0])
+        if len(args) > 1:
+            self._isShowPrice = args[1]
         else:
-            self._isQuestReward = True
+            self._isShowPrice = True
+        if len(args) > 2:
+            self._specialArgs = args[2]
+        else:
+            self._specialArgs = []
         self._item = self.itemsCache.items.getItemByCD(itemIntCD)
         return self._packItemBlocks()
 
@@ -115,7 +120,7 @@ class ElementTooltip(BlocksTooltipData):
         if self._item.itemTypeID != GUI_ITEM_TYPE.STYLE:
             bonus = self._item.bonus
         else:
-            for container in (self._item.getOutfit(season).hull for season in SeasonType.SEASONS):
+            for container in (self._item.getOutfit(season).hull for season in SeasonType.SEASONS if self._item.getOutfit(season)):
                 camo = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem()
                 if camo and camo.bonus:
                     bonus = camo.bonus
@@ -125,10 +130,10 @@ class ElementTooltip(BlocksTooltipData):
 
         if bonus:
             camo = self._item if not camo else camo
-            items.append(self._packBonusBlock(bonus, camo))
+            items.append(self._packBonusBlock(bonus, camo, self._item.itemTypeID == GUI_ITEM_TYPE.STYLE))
         if not self._item.isHistorical() or self._item.fullDescription:
             items.append(self._packDescriptionBlock())
-        if not self._isQuestReward:
+        if self._isShowPrice:
             items.append(self._packInventoryBlock())
         if not self._item.isUnlocked:
             items.append(self._packLockedBlock())
@@ -210,15 +215,20 @@ class ElementTooltip(BlocksTooltipData):
         width = 102
         if self._item.isWide():
             width = 204 if self._item.itemTypeName == 'inscription' else 278
-        return formatters.packImageBlockData(img=self._item.icon, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=width, height=102, padding={'bottom': 2})
+        if self._specialArgs:
+            component = pickPacker(self._item.itemTypeID).getRawComponent()(*self._specialArgs)
+        else:
+            component = None
+        return formatters.packImageBlockData(img=self._item.getIconApplied(component), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=width, height=102, padding={'bottom': 2})
 
-    def _packBonusBlock(self, bonus, camo):
+    def _packBonusBlock(self, bonus, camo, isStyle=False):
         blocks = []
         vehicle = g_currentVehicle.item
         bonusPercent = bonus.getFormattedValue(vehicle)
         blocks.append(formatters.packImageTextBlockData(title=text_styles.bonusLocalInfoTipText(text_styles.concatStylesToSingleLine('+', bonusPercent)), img=RES_ICONS.MAPS_ICONS_LIBRARY_QUALIFIERS_48X48_CAMOUFLAGE, imgPadding={'left': 12,
          'top': -8}, txtPadding={'top': -4}, txtOffset=69))
-        blocks.append(formatters.packTextBlockData(text=text_styles.main(camo.bonus.description), padding={'top': -46,
+        bonusDescr = camo.bonus.description if not isStyle else VEHICLE_CUSTOMIZATION.BONUS_STYLE
+        blocks.append(formatters.packTextBlockData(text=text_styles.main(bonusDescr), padding={'top': -46,
          'left': 110}))
         stockVehicle = self.itemsCache.items.getStockVehicle(vehicle.intCD)
         comparator = params_helper.camouflageComparator(vehicle, camo)

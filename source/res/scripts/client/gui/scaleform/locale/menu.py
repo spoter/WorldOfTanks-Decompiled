@@ -3,11 +3,14 @@
 from debug_utils import LOG_WARNING
 
 class MENU(object):
+    VEHICLEPREVIEW_TIMELEFT = '#menu:vehiclePreview/timeLeft'
+    VEHICLEPREVIEW_TIMELEFTSHORT = '#menu:vehiclePreview/timeLeftShort'
     TIME_TIMEVALUE = '#menu:Time/timeValue'
     TIME_TIMEVALUESHORT = '#menu:Time/timeValueShort'
     TIME_TIMEVALUEWITHSECS = '#menu:Time/timeValueWithSecs'
     VEHICLEINFO_COMPAREBTN_TOOLTIP = '#menu:vehicleInfo/compareBtn/tooltip'
     HEADERBUTTONS_BTNLABEL = '#menu:headerButtons/btnLabel/'
+    PROMO_TEASERTIMEFORMAT = '#menu:promo/teaserTimeFormat'
     COPY = '#menu:copy'
     LEGAL = '#menu:legal'
     LEGALINFO_CLOSEBTN = '#menu:legalInfo/closeBtn'
@@ -159,6 +162,7 @@ class MENU(object):
     LOBBY_MENU_BUTTONS_LOGOFF = '#menu:lobby_menu/buttons/logoff'
     LOBBY_MENU_BUTTONS_EXIT = '#menu:lobby_menu/buttons/exit'
     LOBBY_MENU_BUTTONS_BACK = '#menu:lobby_menu/buttons/back'
+    LOBBY_MENU_BUTTONS_POST = '#menu:lobby_menu/buttons/post'
     LOBBY_MENU_BUTTONS_REFUSE_TRAINING = '#menu:lobby_menu/buttons/refuse-training'
     LOBBY_MENU_BUTTONS_RESTART_TRAINING = '#menu:lobby_menu/buttons/restart-training'
     INGAME_MENU_SERVERSTATS_SERVER = '#menu:ingame_menu/serverStats/server'
@@ -524,6 +528,7 @@ class MENU(object):
     TANK_PARAMS_STUNMINDURATION = '#menu:tank_params/stunMinDuration'
     DESCRIPTIONS_VEHICLE = '#menu:descriptions/vehicle'
     DESCRIPTIONS_VEHICLEGUN = '#menu:descriptions/vehicleGun'
+    DESCRIPTIONS_VEHICLEGUN_AUTORELOAD = '#menu:descriptions/vehicleGun/autoReload'
     DESCRIPTIONS_VEHICLETURRET = '#menu:descriptions/vehicleTurret'
     DESCRIPTIONS_VEHICLEENGINE = '#menu:descriptions/vehicleEngine'
     DESCRIPTIONS_VEHICLECHASSIS = '#menu:descriptions/vehicleChassis'
@@ -604,6 +609,7 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_MENU_ATTENTION_REDUCEDPERFORMANCE = '#menu:headerButtons/battle/menu/attention/reducedPerformance'
     HEADERBUTTONS_HANGAR = '#menu:headerButtons/hangar'
     HEADERBUTTONS_SHOP = '#menu:headerButtons/shop'
+    HEADERBUTTONS_STORAGE = '#menu:headerButtons/storage'
     HEADERBUTTONS_BATTLE = '#menu:headerButtons/battle'
     HEADERBUTTONS_READY = '#menu:headerButtons/ready'
     HEADERBUTTONS_NOTREADY = '#menu:headerButtons/notReady'
@@ -638,6 +644,7 @@ class MENU(object):
     HEADERBUTTONS_TECHTREE = '#menu:headerButtons/techtree'
     HEADERBUTTONS_BARRACKS = '#menu:headerButtons/barracks'
     HEADERBUTTONS_STRONGHOLD = '#menu:headerButtons/stronghold'
+    HEADERBUTTONS_CLANS = '#menu:headerButtons/clans'
     HEADERBUTTONS_ENCYCLOPEDIA = '#menu:headerButtons/encyclopedia'
     HEADERBUTTONS_WIKI = '#menu:headerButtons/wiki'
     HEADERBUTTONS_BROWSER = '#menu:headerButtons/browser'
@@ -675,6 +682,10 @@ class MENU(object):
     HEADER_VEHICLETYPE_ELITE_HEAVYTANK = '#menu:header/vehicleType/elite/heavyTank'
     HEADER_VEHICLETYPE_ELITE_AT_SPG = '#menu:header/vehicleType/elite/AT-SPG'
     HEADER_VEHICLETYPE_ELITE_SPG = '#menu:header/vehicleType/elite/SPG'
+    HEADER_VEHICLETYPE_ALLIANCE_USSR = '#menu:header/vehicleType/Alliance-USSR'
+    HEADER_VEHICLETYPE_ALLIANCE_GERMANY = '#menu:header/vehicleType/Alliance-Germany'
+    HEADER_VEHICLETYPE_ALLIANCE_USA = '#menu:header/vehicleType/Alliance-USA'
+    HEADER_VEHICLETYPE_ALLIANCE_FRANCE = '#menu:header/vehicleType/Alliance-France'
     HEADER_DEMONSTRATION_INFO = '#menu:header/demonstration/info'
     HEADER_DEMONSTRATION_BTNLABEL = '#menu:header/demonstration/btnLabel'
     HEADER_ACCOUNT_POPOVER_BOOSTERS_BLOCKTITLE = '#menu:header/account/popover/boosters/blockTitle'
@@ -856,6 +867,8 @@ class MENU(object):
     PREMIUM_PACKET_DAYS30 = '#menu:premium/packet/days30'
     PREMIUM_PACKET_DAYS180 = '#menu:premium/packet/days180'
     PREMIUM_PACKET_DAYS360 = '#menu:premium/packet/days360'
+    PREMIUM_PACKET_SHORTDESCRIPTIONSPECIAL = '#menu:premium/packet/shortDescriptionSpecial'
+    PREMIUM_PACKET_LONGDESCRIPTIONSPECIAL = '#menu:premium/packet/longDescriptionSpecial'
     PREMIUM_GOLD = '#menu:premium/gold'
     PREMIUM_SUBMITBUY = '#menu:premium/submitBuy'
     PREMIUM_SUBMITCONTINUE = '#menu:premium/submitContinue'
@@ -1003,19 +1016,25 @@ class MENU(object):
     BARRACKS_MENU_LOCATIONFILTER_BARRACKS = '#menu:barracks/menu/locationFilter/barracks'
     BARRACKS_MENU_LOCATIONFILTER_BARRACKSANDTANKS = '#menu:barracks/menu/locationFilter/barracksAndTanks'
     BARRACKS_MENU_LOCATIONFILTER_DISMISSED = '#menu:barracks/menu/locationFilter/dismissed'
+    BARRACKS_MENU_LOCATIONFILTER_NOTRECRUITED = '#menu:barracks/menu/locationFilter/notRecruited'
     BARRACKS_DISMISSEDTANKMENCOUNT = '#menu:barracks/dismissedTankmenCount'
     BARRACKS_TANKMENCOUNT = '#menu:barracks/tankmenCount'
     BARRACKS_BTNRECRUIT = '#menu:barracks/btnRecruit'
+    BARRACKS_NOTRECRUITEDACTIVATEBEFORE = '#menu:barracks/notRecruitedActivateBefore'
     BARRACKS_PLACESCOUNT = '#menu:barracks/placesCount'
+    BARRACKS_NOTRECRUITEDCOUNT = '#menu:barracks/notRecruitedCount'
     BARRACKS_RECOVERYCOUNT = '#menu:barracks/recoveryCount'
     BARRACKS_BARRACKSRENDERER_PLACESCOUNT = '#menu:barracks/barracksRenderer/placesCount'
     BARRACKS_BTNNEWPLACE = '#menu:barracks/btnNewPlace'
     BARRACKS_BTNUNLOAD = '#menu:barracks/btnUnload'
     BARRACKS_BTNDISSMISS = '#menu:barracks/btnDissmiss'
+    BARRACKS_BTNRECRUITNOTRECRUITED = '#menu:barracks/btnRecruitNotRecruited'
     BARRACKS_BTNRECOVERY = '#menu:barracks/btnRecovery'
     BARRACKS_NORECOVERYTANKMEN_TITLE = '#menu:barracks/noRecoveryTankmen/title'
     BARRACKS_NORECOVERYTANKMEN_MESSAGE = '#menu:barracks/noRecoveryTankmen/message'
     BARRACKS_NOFILTEREDRECOVERYTANKMEN_MESSAGE = '#menu:barracks/noFilteredRecoveryTankmen/message'
+    BARRACKS_NONOTRECRUITEDTANKMEN_TITLE = '#menu:barracks/noNotRecruitedTankmen/title'
+    BARRACKS_NONOTRECRUITEDTANKMEN_MESSAGE = '#menu:barracks/noNotRecruitedTankmen/message'
     STORE_MENU_NOITEMS = '#menu:store/menu/noItems'
     STORE_BACKBUTTON_LABEL = '#menu:store/backButton/label'
     STORE_BACKBUTTON_DESCRIPTION = '#menu:store/backButton/description'
@@ -1383,6 +1402,10 @@ class MENU(object):
     CLASSES_SHORT_HEAVYTANK = '#menu:classes/short/heavyTank'
     CLASSES_SHORT_SPG = '#menu:classes/short/SPG'
     CLASSES_SHORT_AT_SPG = '#menu:classes/short/AT-SPG'
+    CLASSES_SHORT_ALLIANCE_USSR = '#menu:classes/short/Alliance-USSR'
+    CLASSES_SHORT_ALLIANCE_GERMANY = '#menu:classes/short/Alliance-Germany'
+    CLASSES_SHORT_ALLIANCE_USA = '#menu:classes/short/Alliance-USA'
+    CLASSES_SHORT_ALLIANCE_FRANCE = '#menu:classes/short/Alliance-France'
     CLASSES_LIGHTTANK = '#menu:classes/lightTank'
     CLASSES_MEDIUMTANK = '#menu:classes/mediumTank'
     CLASSES_HEAVYTANK = '#menu:classes/heavyTank'
@@ -1452,6 +1475,18 @@ class MENU(object):
     DATETIME_MONTHS_FULL_10 = '#menu:dateTime/months/full/10'
     DATETIME_MONTHS_FULL_11 = '#menu:dateTime/months/full/11'
     DATETIME_MONTHS_FULL_12 = '#menu:dateTime/months/full/12'
+    DATETIME_MONTHS_1 = '#menu:dateTime/months/1'
+    DATETIME_MONTHS_2 = '#menu:dateTime/months/2'
+    DATETIME_MONTHS_3 = '#menu:dateTime/months/3'
+    DATETIME_MONTHS_4 = '#menu:dateTime/months/4'
+    DATETIME_MONTHS_5 = '#menu:dateTime/months/5'
+    DATETIME_MONTHS_6 = '#menu:dateTime/months/6'
+    DATETIME_MONTHS_7 = '#menu:dateTime/months/7'
+    DATETIME_MONTHS_8 = '#menu:dateTime/months/8'
+    DATETIME_MONTHS_9 = '#menu:dateTime/months/9'
+    DATETIME_MONTHS_10 = '#menu:dateTime/months/10'
+    DATETIME_MONTHS_11 = '#menu:dateTime/months/11'
+    DATETIME_MONTHS_12 = '#menu:dateTime/months/12'
     DATETIME_MONTHS_SHORT_1 = '#menu:dateTime/months/short/1'
     DATETIME_MONTHS_SHORT_2 = '#menu:dateTime/months/short/2'
     DATETIME_MONTHS_SHORT_3 = '#menu:dateTime/months/short/3'
@@ -1566,6 +1601,19 @@ class MENU(object):
     AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD = '#menu:awardWindow/personalMission/nextButtonAward'
     AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD_TOOLTIP_HEADER = '#menu:awardWindow/personalMission/nextButtonAward/tooltip/header'
     AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD_TOOLTIP_BODY = '#menu:awardWindow/personalMission/nextButtonAward/tooltip/body'
+    AWARDWINDOW_TITLE_BLOGGERSAWARD = '#menu:awardWindow/title/bloggersAward'
+    AWARDWINDOW_BLOGGERSAWARD_HEADER = '#menu:awardWindow/bloggersAward/header'
+    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION = '#menu:awardWindow/bloggersAward/description'
+    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_MEDAL = '#menu:awardWindow/bloggersAward/description/medal'
+    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_EMBLEM = '#menu:awardWindow/bloggersAward/description/emblem'
+    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_INSCRIPTION = '#menu:awardWindow/bloggersAward/description/inscription'
+    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_EXP = '#menu:awardWindow/bloggersAward/description/exp'
+    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_STYLE = '#menu:awardWindow/bloggersAward/description/style'
+    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_BADGE = '#menu:awardWindow/bloggersAward/description/badge'
+    AWARDWINDOW_BLOGGERSAWARD_NAME_USHA = '#menu:awardWindow/bloggersAward/name/usha'
+    AWARDWINDOW_BLOGGERSAWARD_NAME_AMWAY = '#menu:awardWindow/bloggersAward/name/amway'
+    AWARDWINDOW_BLOGGERSAWARD_NAME_JOVE = '#menu:awardWindow/bloggersAward/name/jove'
+    AWARDWINDOW_BLOGGERSAWARD_NAME_LEBWA = '#menu:awardWindow/bloggersAward/name/lebwa'
     REFERRALMANAGEMENTWINDOW_TITLE = '#menu:ReferralManagementWindow/title'
     REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVENOTTANK = '#menu:ReferralManagementWindow/infoHeader/haveNotTank'
     REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVETANK = '#menu:ReferralManagementWindow/infoHeader/haveTank'
@@ -1600,6 +1648,13 @@ class MENU(object):
     REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_SQUAD_TEXT = '#menu:ReferralReferralsIntroWindow/text_block/squad_text'
     VEHICLE_IGRRENTLEFT_DAYS = '#menu:vehicle/igrRentLeft/days'
     VEHICLE_IGRRENTLEFT_HOURS = '#menu:vehicle/igrRentLeft/hours'
+    VEHICLEPREVIEW_ENDTIME = '#menu:vehiclePreview/endTime'
+    VEHICLEPREVIEW_TIMELEFT_HOURS = '#menu:vehiclePreview/timeLeft/hours'
+    VEHICLEPREVIEW_TIMELEFT_MIN = '#menu:vehiclePreview/timeLeft/min'
+    VEHICLEPREVIEW_TIMELEFT_LESSMIN = '#menu:vehiclePreview/timeLeft/lessMin'
+    VEHICLEPREVIEW_TIMELEFTSHORT_HOURS = '#menu:vehiclePreview/timeLeftShort/hours'
+    VEHICLEPREVIEW_TIMELEFTSHORT_MIN = '#menu:vehiclePreview/timeLeftShort/min'
+    VEHICLEPREVIEW_TIMELEFTSHORT_LESSMIN = '#menu:vehiclePreview/timeLeftShort/lessMin'
     TIME_TIMEVALUE_DAYS = '#menu:Time/timeValue/days'
     TIME_TIMEVALUE_HOURS = '#menu:Time/timeValue/hours'
     TIME_TIMEVALUE_MIN = '#menu:Time/timeValue/min'
@@ -1615,6 +1670,11 @@ class MENU(object):
     PROMO_PATCH_TITLE = '#menu:promo/patch/title'
     PROMO_PATCH_MESSAGE = '#menu:promo/patch/message'
     PROMO_TOARCHIVE = '#menu:promo/toArchive'
+    PROMO_TEASERTIMEFORMAT_DAYS = '#menu:promo/teaserTimeFormat/days'
+    PROMO_TEASERTIMEFORMAT_HOURS = '#menu:promo/teaserTimeFormat/hours'
+    PROMO_TEASERTIMEFORMAT_MIN = '#menu:promo/teaserTimeFormat/min'
+    PROMO_TEASERTIMEFORMAT_LESSMIN = '#menu:promo/teaserTimeFormat/lessMin'
+    PROMO_TEASER_TITLE = '#menu:promo/teaser/title'
     PROMOPREMIUMIGRWINDOW_WINDOWTITLE = '#menu:PromoPremiumIgrWindow/windowTitle'
     PROMOPREMIUMIGRWINDOW_TITLE = '#menu:PromoPremiumIgrWindow/title'
     PROMOPREMIUMIGRWINDOW_TEXT = '#menu:PromoPremiumIgrWindow/text'
@@ -1640,12 +1700,16 @@ class MENU(object):
     BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO_EMPTY_MESSAGE = '#menu:boostersWindow/boostersTable/noInfo/empty/message'
     BOOSTER_USERNAME_BOOSTER_XP = '#menu:booster/userName/booster_xp'
     BOOSTER_DESCRIPTION_BOOSTER_XP = '#menu:booster/description/booster_xp'
+    BOOSTER_BONUS_BOOSTER_XP = '#menu:booster/bonus/booster_xp'
     BOOSTER_USERNAME_BOOSTER_FREE_XP = '#menu:booster/userName/booster_free_xp'
     BOOSTER_DESCRIPTION_BOOSTER_FREE_XP = '#menu:booster/description/booster_free_xp'
+    BOOSTER_BONUS_BOOSTER_FREE_XP = '#menu:booster/bonus/booster_free_xp'
     BOOSTER_USERNAME_BOOSTER_CREW_XP = '#menu:booster/userName/booster_crew_xp'
     BOOSTER_DESCRIPTION_BOOSTER_CREW_XP = '#menu:booster/description/booster_crew_xp'
+    BOOSTER_BONUS_BOOSTER_CREW_XP = '#menu:booster/bonus/booster_crew_xp'
     BOOSTER_USERNAME_BOOSTER_CREDITS = '#menu:booster/userName/booster_credits'
     BOOSTER_DESCRIPTION_BOOSTER_CREDITS = '#menu:booster/description/booster_credits'
+    BOOSTER_BONUS_BOOSTER_CREDITS = '#menu:booster/bonus/booster_credits'
     BOOSTER_USERNAME_BOOSTER_REPAIR = '#menu:booster/userName/booster_repair'
     BOOSTER_DESCRIPTION_BOOSTER_REPAIR = '#menu:booster/description/booster_repair'
     BOOSTER_DESCRIPTION_EFFECTTIME = '#menu:booster/description/effectTime'
@@ -1690,6 +1754,7 @@ class MENU(object):
     CRYSTALS_PROMOWINDOW_SUBTITLE2 = '#menu:crystals/promoWindow/subTitle2'
     CRYSTALS_PROMOWINDOW_SUBDESCR2 = '#menu:crystals/promoWindow/subDescr2'
     CRYSTALS_PROMOWINDOW_CLOSEBTN = '#menu:crystals/promoWindow/closebtn'
+    CRYSTALS_PROMOWINDOW_OPENSHOPBTNLABEL = '#menu:crystals/promoWindow/openShopBtnLabel'
     BOOSTERBUYWINDOW_WINDOWTITLE = '#menu:boosterBuyWindow/windowTitle'
     BOOSTERBUYWINDOW_BUYBUTTONLABEL = '#menu:boosterBuyWindow/buyButtonLabel'
     BOOSTERBUYWINDOW_CANCELBUTTONLABEL = '#menu:boosterBuyWindow/cancelButtonLabel'
@@ -1709,12 +1774,19 @@ class MENU(object):
     CST_ITEM_CTX_MENU_BUY = '#menu:cst_item_ctx_menu/buy'
     CST_ITEM_CTX_MENU_SELL = '#menu:cst_item_ctx_menu/sell'
     CST_ITEM_CTX_MENU_REMOVEFROMTANK = '#menu:cst_item_ctx_menu/removeFromTank'
+    CST_ITEM_CTX_MENU_INFORMATION = '#menu:cst_item_ctx_menu/information'
+    CST_ITEM_CTX_MENU_PROHIBITSALE = '#menu:cst_item_ctx_menu/prohibitSale'
+    CST_ITEM_CTX_MENU_ALLOWSALE = '#menu:cst_item_ctx_menu/allowSale'
     VIEWHEADER_BACKBTN_LABEL = '#menu:viewHeader/backBtn/label'
     VIEWHEADER_CLOSEBTN_LABEL = '#menu:viewHeader/closeBtn/label'
     INTERNET_PROVIDER_ROSTELECOM_NAME = '#menu:internet_provider/Rostelecom/name'
     INTERNET_PROVIDER_ROSTELECOM_TARIFF = '#menu:internet_provider/Rostelecom/tariff'
     INTERNET_PROVIDER_BELTELECOM_NAME = '#menu:internet_provider/Beltelecom/name'
     INTERNET_PROVIDER_BELTELECOM_TARIFF = '#menu:internet_provider/Beltelecom/tariff'
+    INTERNET_PROVIDER_KYIVSTAR_NAME = '#menu:internet_provider/Kyivstar/name'
+    INTERNET_PROVIDER_KYIVSTAR_TARIFF = '#menu:internet_provider/Kyivstar/tariff'
+    INTERNET_PROVIDER_KAZAKHTELECOM_NAME = '#menu:internet_provider/Kazakhtelecom/name'
+    INTERNET_PROVIDER_KAZAKHTELECOM_TARIFF = '#menu:internet_provider/Kazakhtelecom/tariff'
     DATETIME_WEEKDAYS_SHORT_ENUM = (DATETIME_WEEKDAYS_SHORT_1,
      DATETIME_WEEKDAYS_SHORT_2,
      DATETIME_WEEKDAYS_SHORT_3,
@@ -1828,6 +1900,42 @@ class MENU(object):
      DATETIME_MONTHS_FULL_11,
      DATETIME_MONTHS_FULL_12)
     BROWSER_CUSTOMTITLE_ENUM = (BROWSER_CUSTOMTITLE_FORT_OFFENSIVERESULT, BROWSER_CUSTOMTITLE_FORT_CONGRATULATION)
+    DATETIME_MONTHS_ENUM = (DATETIME_MONTHS_FULL_1,
+     DATETIME_MONTHS_FULL_2,
+     DATETIME_MONTHS_FULL_3,
+     DATETIME_MONTHS_FULL_4,
+     DATETIME_MONTHS_FULL_5,
+     DATETIME_MONTHS_FULL_6,
+     DATETIME_MONTHS_FULL_7,
+     DATETIME_MONTHS_FULL_8,
+     DATETIME_MONTHS_FULL_9,
+     DATETIME_MONTHS_FULL_10,
+     DATETIME_MONTHS_FULL_11,
+     DATETIME_MONTHS_FULL_12,
+     DATETIME_MONTHS_1,
+     DATETIME_MONTHS_2,
+     DATETIME_MONTHS_3,
+     DATETIME_MONTHS_4,
+     DATETIME_MONTHS_5,
+     DATETIME_MONTHS_6,
+     DATETIME_MONTHS_7,
+     DATETIME_MONTHS_8,
+     DATETIME_MONTHS_9,
+     DATETIME_MONTHS_10,
+     DATETIME_MONTHS_11,
+     DATETIME_MONTHS_12,
+     DATETIME_MONTHS_SHORT_1,
+     DATETIME_MONTHS_SHORT_2,
+     DATETIME_MONTHS_SHORT_3,
+     DATETIME_MONTHS_SHORT_4,
+     DATETIME_MONTHS_SHORT_5,
+     DATETIME_MONTHS_SHORT_6,
+     DATETIME_MONTHS_SHORT_7,
+     DATETIME_MONTHS_SHORT_8,
+     DATETIME_MONTHS_SHORT_9,
+     DATETIME_MONTHS_SHORT_10,
+     DATETIME_MONTHS_SHORT_11,
+     DATETIME_MONTHS_SHORT_12)
     DENUNCIATION_ENUM = (DENUNCIATION_1,
      DENUNCIATION_2,
      DENUNCIATION_3,
@@ -1846,6 +1954,20 @@ class MENU(object):
      NATIONS_POLAND,
      NATIONS_ITALY,
      NATIONS_ALL)
+    HEADER_VEHICLETYPE_ENUM = (HEADER_VEHICLETYPE_LIGHTTANK,
+     HEADER_VEHICLETYPE_MEDIUMTANK,
+     HEADER_VEHICLETYPE_HEAVYTANK,
+     HEADER_VEHICLETYPE_AT_SPG,
+     HEADER_VEHICLETYPE_SPG,
+     HEADER_VEHICLETYPE_ELITE_LIGHTTANK,
+     HEADER_VEHICLETYPE_ELITE_MEDIUMTANK,
+     HEADER_VEHICLETYPE_ELITE_HEAVYTANK,
+     HEADER_VEHICLETYPE_ELITE_AT_SPG,
+     HEADER_VEHICLETYPE_ELITE_SPG,
+     HEADER_VEHICLETYPE_ALLIANCE_USSR,
+     HEADER_VEHICLETYPE_ALLIANCE_GERMANY,
+     HEADER_VEHICLETYPE_ALLIANCE_USA,
+     HEADER_VEHICLETYPE_ALLIANCE_FRANCE)
     TANK_PARAMS_ENUM = (TANK_PARAMS_MAXHEALTH,
      TANK_PARAMS_VEHICLEWEIGHT,
      TANK_PARAMS_ENGINEPOWER,
@@ -1931,7 +2053,11 @@ class MENU(object):
      CLASSES_SHORT_MEDIUMTANK,
      CLASSES_SHORT_HEAVYTANK,
      CLASSES_SHORT_SPG,
-     CLASSES_SHORT_AT_SPG)
+     CLASSES_SHORT_AT_SPG,
+     CLASSES_SHORT_ALLIANCE_USSR,
+     CLASSES_SHORT_ALLIANCE_GERMANY,
+     CLASSES_SHORT_ALLIANCE_USA,
+     CLASSES_SHORT_ALLIANCE_FRANCE)
     MODULEINFO_PARAMS_ENUM = (MODULEINFO_PARAMS_MAXLOAD,
      MODULEINFO_PARAMS_BOMBSNUMBERRANGE,
      MODULEINFO_PARAMS_AREASQUARE,
@@ -2041,6 +2167,11 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT,
      TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPUNLOCKED,
      TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPLOCKED)
+    HEADER_VEHICLETYPE_ELITE_ENUM = (HEADER_VEHICLETYPE_ELITE_LIGHTTANK,
+     HEADER_VEHICLETYPE_ELITE_MEDIUMTANK,
+     HEADER_VEHICLETYPE_ELITE_HEAVYTANK,
+     HEADER_VEHICLETYPE_ELITE_AT_SPG,
+     HEADER_VEHICLETYPE_ELITE_SPG)
     LEVELS_ROMAN_ENUM = (LEVELS_ROMAN_1,
      LEVELS_ROMAN_2,
      LEVELS_ROMAN_3,
@@ -2052,8 +2183,14 @@ class MENU(object):
      LEVELS_ROMAN_9,
      LEVELS_ROMAN_10)
     HANGAR_HEADER_BATTLE_QUESTS_LABEL_ENUM = (HANGAR_HEADER_BATTLE_QUESTS_LABEL_ACTIVE, HANGAR_HEADER_BATTLE_QUESTS_LABEL_INACTIVE)
-    INTERNET_PROVIDER_ALL_NAME_ENUM = (INTERNET_PROVIDER_ROSTELECOM_NAME, INTERNET_PROVIDER_BELTELECOM_NAME)
-    INTERNET_PROVIDER_ALL_TARIFF_ENUM = (INTERNET_PROVIDER_ROSTELECOM_TARIFF, INTERNET_PROVIDER_BELTELECOM_TARIFF)
+    INTERNET_PROVIDER_ALL_NAME_ENUM = (INTERNET_PROVIDER_ROSTELECOM_NAME,
+     INTERNET_PROVIDER_BELTELECOM_NAME,
+     INTERNET_PROVIDER_KYIVSTAR_NAME,
+     INTERNET_PROVIDER_KAZAKHTELECOM_NAME)
+    INTERNET_PROVIDER_ALL_TARIFF_ENUM = (INTERNET_PROVIDER_ROSTELECOM_TARIFF,
+     INTERNET_PROVIDER_BELTELECOM_TARIFF,
+     INTERNET_PROVIDER_KYIVSTAR_TARIFF,
+     INTERNET_PROVIDER_KAZAKHTELECOM_TARIFF)
     TANKMEN_ENUM = (TANKMEN_LIGHTTANK,
      TANKMEN_MEDIUMTANK,
      TANKMEN_HEAVYTANK,
@@ -2105,11 +2242,26 @@ class MENU(object):
      LOADING_BATTLETYPES_22,
      LOADING_BATTLETYPES_DESC_22)
     REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_ENUM = (REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_INVITE_BLOCK, REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_SQUAD_BLOCK, REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_REFERRALS_BLOCK)
-    CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY, CST_ITEM_CTX_MENU_SELL, CST_ITEM_CTX_MENU_REMOVEFROMTANK)
+    CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY,
+     CST_ITEM_CTX_MENU_SELL,
+     CST_ITEM_CTX_MENU_REMOVEFROMTANK,
+     CST_ITEM_CTX_MENU_INFORMATION,
+     CST_ITEM_CTX_MENU_PROHIBITSALE,
+     CST_ITEM_CTX_MENU_ALLOWSALE)
     HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ENUM = (HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ACTIVE,
      HANGAR_HEADER_PERSONAL_QUESTS_LABEL_EMPTY,
      HANGAR_HEADER_PERSONAL_QUESTS_LABEL_INACTIVE,
      HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ALL_DONE)
+    HEADER_LEVEL_ENUM = (HEADER_LEVEL_1,
+     HEADER_LEVEL_2,
+     HEADER_LEVEL_3,
+     HEADER_LEVEL_4,
+     HEADER_LEVEL_5,
+     HEADER_LEVEL_6,
+     HEADER_LEVEL_7,
+     HEADER_LEVEL_8,
+     HEADER_LEVEL_9,
+     HEADER_LEVEL_10)
 
     @classmethod
     def contextmenu(cls, key0):
@@ -2184,6 +2336,15 @@ class MENU(object):
             return outcome
 
     @classmethod
+    def datetime_months(cls, key0):
+        outcome = '#menu:dateTime/months/{}'.format(key0)
+        if outcome not in cls.DATETIME_MONTHS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
     def moduleinfo_params(cls, key0):
         outcome = '#menu:moduleInfo/params/{}'.format(key0)
         if outcome not in cls.MODULEINFO_PARAMS_ENUM:
@@ -2247,6 +2408,33 @@ class MENU(object):
             return outcome
 
     @classmethod
+    def header_level(cls, key0):
+        outcome = '#menu:header/level/{}'.format(key0)
+        if outcome not in cls.HEADER_LEVEL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def header_vehicletype(cls, key0):
+        outcome = '#menu:header/vehicleType/{}'.format(key0)
+        if outcome not in cls.HEADER_VEHICLETYPE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def header_vehicletype_elite(cls, key0):
+        outcome = '#menu:header/vehicleType/elite/{}'.format(key0)
+        if outcome not in cls.HEADER_VEHICLETYPE_ELITE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
     def classesShort(cls, key0):
         outcome = '#menu:classes/short/{}'.format(key0)
         if outcome not in cls.CLASSES_SHORT_ENUM:
@@ -2265,7 +2453,7 @@ class MENU(object):
             return outcome
 
     @classmethod
-    def hangarHeaderPersonalQuestsLabel(cls, key0):
+    def hangarHeaderPersonalMissionsLabel(cls, key0):
         outcome = '#menu:hangar_header/personal_quests_label/{}'.format(key0)
         if outcome not in cls.HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))

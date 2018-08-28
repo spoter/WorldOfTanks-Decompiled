@@ -1,13 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/proxy_data.py
+import gui.awards.event_dispatcher as shared_events
 from account_helpers import getAccountDatabaseID
 from adisp import process
 from gui.Scaleform.locale.MENU import MENU
+from gui.promo.promo_logger import PromoLogSourceType, PromoLogActions
+from gui.wgnc.common import WebHandlersContainer
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
-from gui.wgnc.common import WebHandlersContainer
 from helpers import dependency
-from skeletons.gui.game_control import IEncyclopediaController, IBrowserController
+from skeletons.gui.game_control import IEncyclopediaController, IBrowserController, IPromoController
+from skeletons.gui.shared.promo import IPromoLogger
 
 class _ProxyDataItem(object):
 
@@ -205,6 +208,20 @@ class EncyclopediaContentItem(_ProxyDataItem):
         self.encyclopedia.addEncyclopediaRecommendation(self.__contentId)
 
 
+class ShowTeaserItem(_ProxyDataItem):
+    _promoCtrl = dependency.descriptor(IPromoController)
+
+    def __init__(self, data):
+        self.__data = data
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.SHOW_PROMO_TEASER
+
+    def show(self, _):
+        dependency.instance(IPromoLogger).logTeaserAction(self.__data['lastPromo'], action=PromoLogActions.RECEIVED_WGNC, source=PromoLogSourceType.WGNC)
+        self._promoCtrl.setNewTeaserData(self.__data)
+
+
 class ShowInBrowserItem(_ProxyDataItem, WebHandlersContainer):
     browserCtrl = dependency.descriptor(IBrowserController)
 
@@ -232,6 +249,20 @@ class ShowInBrowserItem(_ProxyDataItem, WebHandlersContainer):
         if self.__titleKey:
             localizedValue = MENU.browser_customtitle(self.__titleKey)
         return localizedValue or self.__title
+
+
+class ShowBloggersAwardItem(_ProxyDataItem):
+    _promoCtrl = dependency.descriptor(IPromoController)
+
+    def __init__(self, award_id, blogger):
+        self.__awardId = award_id
+        self.__blogger = blogger
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.SHOW_BLOGGERS_AWARD
+
+    def show(self, _):
+        return shared_events.showBloggersBattleAward(self.__awardId, self.__blogger)
 
 
 class ProxyDataHolder(object):

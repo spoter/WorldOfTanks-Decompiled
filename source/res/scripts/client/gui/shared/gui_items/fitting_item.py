@@ -4,6 +4,7 @@ from collections import namedtuple
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui import GUI_SETTINGS
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY, ITEM_PRICES_EMPTY
 from gui.shared.gui_items.gui_item import GUIItem, HasIntCD
@@ -195,6 +196,14 @@ class FittingItem(GUIItem, HasIntCD):
         return stripShortDescrTags(self.descriptor.description)
 
     @property
+    def shortDescriptionSpecial(self):
+        return self.descriptor.shortDescriptionSpecial
+
+    @property
+    def longDescriptionSpecial(self):
+        return self.descriptor.longDescriptionSpecial
+
+    @property
     def name(self):
         return self.descriptor.name
 
@@ -205,22 +214,6 @@ class FittingItem(GUIItem, HasIntCD):
     @property
     def isInInventory(self):
         return self.inventoryCount > 0
-
-    def _getShortInfo(self, vehicle=None, expanded=False):
-        try:
-            description = i18n.makeString('#menu:descriptions/' + self.itemTypeName + ('Full' if expanded else ''))
-            vehicleDescr = vehicle.descriptor if vehicle is not None else None
-            params = params_helper.getParameters(self, vehicleDescr)
-            formattedParametersDict = dict(formatters.getFormattedParamsList(self.descriptor, params))
-            if self.itemTypeName == vehicles._VEHICLE:
-                formattedParametersDict['caliber'] = BigWorld.wg_getIntegralFormat(self.descriptor.gun.shots[0].shell.caliber)
-            result = description % formattedParametersDict
-            return result
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-            return ''
-
-        return
 
     def getShortInfo(self, vehicle=None, expanded=False):
         return '' if not GUI_SETTINGS.technicalInfo else self._getShortInfo(vehicle, expanded)
@@ -251,6 +244,9 @@ class FittingItem(GUIItem, HasIntCD):
 
     def getBonusIcon(self, size='small'):
         return self.icon
+
+    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
+        return self.descriptor.icon[0].split('/')[-1].split('.')[0]
 
     def getBuyPrice(self, preferred=True):
         if self.buyPrices.hasAltPrice():
@@ -357,6 +353,23 @@ class FittingItem(GUIItem, HasIntCD):
 
     def _sortByType(self, other):
         pass
+
+    def _getShortInfo(self, vehicle=None, expanded=False):
+        try:
+            description = i18n.makeString(self._getShortInfoKey() + ('Full' if expanded else ''))
+            vehicleDescr = vehicle.descriptor if vehicle is not None else None
+            params = params_helper.getParameters(self, vehicleDescr)
+            formattedParametersDict = dict(formatters.getFormattedParamsList(self.descriptor, params))
+            result = description % formattedParametersDict
+            return result
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+            return ''
+
+        return
+
+    def _getShortInfoKey(self):
+        return '#menu:descriptions/' + self.itemTypeName
 
     def __cmp__(self, other):
         if other is None:

@@ -69,6 +69,10 @@ class ISharedControllersLocator(object):
     def viewPoints(self):
         raise NotImplementedError
 
+    @property
+    def questProgress(self):
+        raise NotImplementedError
+
 
 class IDynamicControllersLocator(object):
     __slots__ = ()
@@ -463,7 +467,10 @@ class IBattleContext(object):
     def hasSquadRestrictions(self):
         raise NotImplementedError
 
-    def getQuestInfo(self):
+    def getSelectedQuestIDs(self):
+        raise NotImplementedError
+
+    def getSelectedQuestInfo(self):
         raise NotImplementedError
 
     def getTeamName(self, enemy=False):

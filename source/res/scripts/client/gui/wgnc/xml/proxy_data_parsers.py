@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/xml/proxy_data_parsers.py
 from debug_utils import LOG_ERROR
+from gui.wgcg.promo_screens.parsers import PromoDataParser
 from gui.wgnc import proxy_data
 from gui.wgnc.wgnc_helpers import parseSize
 from gui.wgnc.xml.shared_parsers import ParsersCollection, SectionParser
@@ -127,6 +128,17 @@ class _EncyclopediaContentParser(SectionParser):
         return proxy_data.EncyclopediaContentItem(section.readInt('content_id'))
 
 
+class _ShowPromoParser(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        data = dict(section)
+        data['data'] = dict(section['data'])
+        return proxy_data.ShowTeaserItem(PromoDataParser.parseXML(section))
+
+
 class _ShowInBrowserParser(SectionParser):
 
     def getTagName(self):
@@ -144,6 +156,15 @@ class _ShowInBrowserParser(SectionParser):
         webClientHandler = section.readString('web_client_handler')
         isSolidBorder = section.readBool('is_solid_border')
         return proxy_data.ShowInBrowserItem(url, size, title, showRefresh, webClientHandler, titleKey=titleKey, isSolidBorder=isSolidBorder)
+
+
+class _ShowBloggersAward(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        return proxy_data.ShowBloggersAwardItem(section.readInt('award_id'), section.readString('blogger'))
 
 
 class _ProxyDataItemsParser(ParsersCollection):
@@ -173,4 +194,6 @@ class ProxyDataItemParser_v2(_ProxyDataItemsParser):
          _ClanInviteDeclinedParser(),
          _ClanInviteAcceptedParser(),
          _EncyclopediaContentParser(),
-         _ShowInBrowserParser()))
+         _ShowInBrowserParser(),
+         _ShowPromoParser(),
+         _ShowBloggersAward()))

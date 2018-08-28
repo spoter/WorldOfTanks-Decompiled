@@ -5,7 +5,7 @@ import items.vehicles as iv
 from items.components import shared_components
 from soft_exception import SoftException
 from items.components.c11n_constants import ApplyArea, SeasonType, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType
-from typing import List, Dict, Type, Tuple, Optional, Union, TypeVar
+from typing import List, Dict, Type, Tuple, Optional, Union, TypeVar, FrozenSet
 Item = TypeVar('TypeVar')
 
 class BaseCustomizationItem(object):
@@ -43,6 +43,9 @@ class BaseCustomizationItem(object):
     def isRare(self):
         return ItemTags.RARE in self.tags
 
+    def isHiddenInUI(self):
+        return ItemTags.HIDDEN_IN_UI in self.tags
+
     @property
     def isUnique(self):
         return self.maxNumber > 0
@@ -66,6 +69,14 @@ class BaseCustomizationItem(object):
     @property
     def description(self):
         return self.i18n.description if self.i18n else ''
+
+    @property
+    def shortDescriptionSpecial(self):
+        return self.i18n.shortDescriptionSpecial if self.i18n else ''
+
+    @property
+    def longDescriptionSpecial(self):
+        return self.i18n.longDescriptionSpecial if self.i18n else ''
 
 
 class PaintItem(BaseCustomizationItem):
@@ -253,7 +264,7 @@ class VehicleFilter(object):
 
 
 class CustomizationCache(object):
-    __slots__ = ('paints', 'camouflages', 'decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'styles', 'defaultColors', 'itemTypes', 'priceGroupTags')
+    __slots__ = ('paints', 'camouflages', 'decals', 'modifications', 'levels', 'itemToPriceGroup', 'priceGroups', 'priceGroupNames', 'styles', 'defaultColors', 'itemTypes', 'priceGroupTags', '__victimStyles')
 
     def __init__(self):
         self.priceGroupTags = {}
@@ -266,6 +277,7 @@ class CustomizationCache(object):
         self.priceGroupNames = {}
         self.styles = {}
         self.defaultColors = {}
+        self.__victimStyles = {}
         self.itemTypes = {CustomizationType.MODIFICATION: self.modifications,
          CustomizationType.STYLE: self.styles,
          CustomizationType.DECAL: self.decals,
@@ -287,6 +299,17 @@ class CustomizationCache(object):
     def splitByVehicleBound(self, itemsDict, vehType):
         itemsToOperate = {k:(v, vehType if self.isVehicleBound(k) or v < 0 else 0) for k, v in itemsDict.iteritems() if v != 0}
         return itemsToOperate
+
+    def getVictimStyles(self, hunting, vehType):
+        if not self.__victimStyles:
+            self.__victimStyles[''] = {}
+            stylesByColor = self.__victimStyles.setdefault
+            for style in self.styles.itervalues():
+                for tag in style.tags:
+                    if tag.endswith('Victim'):
+                        stylesByColor(tag[:-6], []).append(style)
+
+        return [ s for s in self.__victimStyles.get(hunting, []) if s.matchVehicleType(vehType) ]
 
     def validateOutfit(self, vehTypeDescr, outfitDescr, tokens=None, season=SeasonType.ALL):
 

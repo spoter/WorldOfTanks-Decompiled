@@ -202,7 +202,7 @@
     <historical>	false	</historical>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
       </include>
     </vehicleFilter>
     <decal>
@@ -238,7 +238,7 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	germany italy japan	</nations>
       </include>
     </vehicleFilter>
@@ -246,6 +246,213 @@
       <id>	552	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_382.dds	</texture>
       <userString>	#vehicle_customization:emblem/special/sticker_382	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Football_2018_notInShop	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <historical>	false	</historical>
+    <vehicleFilter></vehicleFilter>
+    <decal>
+      <id>	553	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_384.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_384	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	554	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_385.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_385	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	555	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_386.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_386	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	556	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_387.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_387	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	557	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_388.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_388	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	558	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_389.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_389	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	559	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_390.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_390	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Football_2018_4sale	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <type>	EMBLEM	</type>
+    <historical>	false	</historical>
+    <vehicleFilter></vehicleFilter>
+    <decal>
+      <id>	563	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_391.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_391	</userString>
+      <mirror>	false	</mirror>
+      <priceGroup>	football emblems 200	</priceGroup>
+    </decal>
+    <decal>
+      <id>	564	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_392.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_392	</userString>
+      <mirror>	false	</mirror>
+      <priceGroup>	football emblems 100	</priceGroup>
+    </decal>
+    <decal>
+      <id>	565	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_393.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_393	</userString>
+      <mirror>	false	</mirror>
+      <priceGroup>	football emblems 100	</priceGroup>
+    </decal>
+    <decal>
+      <id>	566	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_394.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_394	</userString>
+      <mirror>	false	</mirror>
+      <priceGroup>	football emblems 150	</priceGroup>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Kursk battle	</name>
+    <userString>	#vehicle_customization:emblem/battle	</userString>
+    <type>	EMBLEM	</type>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter></vehicleFilter>
+    <decal>
+      <id>	569	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_396.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_396	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	LBZ 2	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <decal>
+      <id>	580	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_398.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_398	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	581	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_399.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_399	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	WG anniversary	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	emblems notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <decal>
+      <id>	582	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_400.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_400	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Sabaton	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	sabaton emblems notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <decal>
+      <id>	585	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_401.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_401	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Gamescom 2018	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	emblems notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <decal>
+      <id>	587	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_403.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_403	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	SuperTest Emblem	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	emblems notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <decal>
+      <id>	589	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_404.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_404	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Battle of Bloggers	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	emblems notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <decal>
+      <id>	590	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_405.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_405	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	591	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_406.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_406	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	592	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_407.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_407	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	593	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_408.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_408	</userString>
       <mirror>	false	</mirror>
     </decal>
   </itemGroup>

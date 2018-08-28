@@ -3,12 +3,12 @@
 import weakref
 import BigWorld
 import Event
+import TriggersManager
+import feedback_events
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET, BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
-import feedback_events
-import TriggersManager
 FEEDBACK_TO_TRIGGER_ID = {_FET.VEHICLE_VISIBILITY_CHANGED: TriggersManager.TRIGGER_TYPE.PLAYER_DETECT_ENEMY}
 _CELL_BLINKING_DURATION = 3.0
 

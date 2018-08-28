@@ -345,7 +345,7 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	ussr poland czech china germany italy japan	</nations>
       </include>
     </vehicleFilter>
@@ -363,7 +363,7 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <levels>	6 8 10	</levels>
+        <levels>	6 8 9 10	</levels>
         <nations>	france uk usa sweden	</nations>
       </include>
     </vehicleFilter>
@@ -371,6 +371,116 @@
       <id>	551	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_198.dds	</texture>
       <userString>	#vehicle_customization:inscription/special/special_198	</userString>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Football_2018_notInShop	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <historical>	false	</historical>
+    <vehicleFilter></vehicleFilter>
+    <decal>
+      <id>	560	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_200.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_200	</userString>
+    </decal>
+    <decal>
+      <id>	561	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_201.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_201	</userString>
+    </decal>
+    <decal>
+      <id>	562	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_202.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_202	</userString>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Kursk battle	</name>
+    <userString>	#vehicle_customization:inscription/historical	</userString>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <historical>	true	</historical>
+    <vehicleFilter></vehicleFilter>
+    <decal>
+      <id>	568	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_203.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_203	</userString>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	WOT birthday	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <decal>
+      <id>	583	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_204.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_204	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Sabaton	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	sabaton inscriptions notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <decal>
+      <id>	584	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_205.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_205	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Gamescom 2018	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <decal>
+      <id>	588	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_206.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_206	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Battle of Bloggers	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	inscriptions notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <decal>
+      <id>	594	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_207.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_207	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	595	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_208.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_208	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	596	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_209.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_209	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	597	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_210.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_210	</userString>
+      <mirror>	false	</mirror>
     </decal>
   </itemGroup>
 </special_inscriptions.xml>

@@ -1,11 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/awards_formatters.py
-from constants import PERSONAL_QUEST_FREE_TOKEN_NAME
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import finders
-from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, formatCountLabel, LABEL_ALIGN, getLinkedSetAwardPacker
+from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, formatCountLabel, LABEL_ALIGN, getLinkedSetAwardPacker, PACK_RENT_VEHICLES_BONUS
 from gui.server_events.bonuses import FreeTokensBonus
 from gui.shared.formatters import text_styles
 from helpers import i18n, dependency
@@ -100,28 +99,59 @@ class DetailedCardAwardComposer(CurtailingAwardsComposer):
         return self._packBonuses(preformattedBonuses, size)
 
 
+class PackRentVehiclesAwardComposer(CurtailingAwardsComposer):
+
+    def _packBonuses(self, preformattedBonuses, size):
+        bonusCount = len(preformattedBonuses)
+        mergedBonuses = []
+        packRentVehicles = None
+        for index, bonus in enumerate(preformattedBonuses):
+            if bonus.bonusName == PACK_RENT_VEHICLES_BONUS:
+                packRentVehicles = preformattedBonuses.pop(index)
+                break
+
+        awardsCount = self._displayedAwardsCount
+        if packRentVehicles:
+            awardsCount -= 1
+        if bonusCount > awardsCount:
+            sliceIdx = awardsCount - 1
+            displayBonuses = preformattedBonuses[:sliceIdx]
+            mergedBonuses = preformattedBonuses[sliceIdx:]
+        else:
+            displayBonuses = preformattedBonuses
+        result = []
+        for b in displayBonuses:
+            result.append(self._packBonus(b, size))
+
+        if packRentVehicles:
+            result.append(self._packBonus(packRentVehicles, size))
+        if mergedBonuses:
+            result.append(self._packMergedBonuses(mergedBonuses, size))
+        return result
+
+
 class PersonalMissionsAwardComposer(CurtailingAwardsComposer):
 
     def __init__(self, displayedAwardsCount, packer=None):
         self._displayedAwardsCount = displayedAwardsCount
         super(PersonalMissionsAwardComposer, self).__init__(displayedAwardsCount, packer or getPersonalMissionAwardPacker())
 
-    def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL, gap=0, isObtained=False, areTokensPawned=False, pawnCost=0, obtainedImage='', obtainedImageOffset=0):
-        if areTokensPawned:
+    def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL, gap=0, isObtained=False, pawnedTokensCount=0, obtainedImage='', obtainedImageOffset=0, freeTokenName=''):
+        if pawnedTokensCount > 0:
             newBonuses = []
-            context = {'pawnCost': pawnCost,
-             'areTokensPawned': True}
             hasFreeTokens = False
+            ctx = {}
             for bonus in bonuses:
+                ctx = bonus.getContext()
                 if bonus.getName() == 'freeTokens':
-                    value = {PERSONAL_QUEST_FREE_TOKEN_NAME: {'count': bonus.getCount() + pawnCost}}
-                    newBonuses.append(FreeTokensBonus(value, ctx=context))
+                    value = {freeTokenName: {'count': bonus.getCount() + pawnedTokensCount}}
+                    newBonuses.append(FreeTokensBonus(value, ctx=ctx, hasPawned=True))
                     hasFreeTokens = True
                 newBonuses.append(bonus)
 
             if not hasFreeTokens:
-                value = {PERSONAL_QUEST_FREE_TOKEN_NAME: {'count': pawnCost}}
-                newBonuses.append(FreeTokensBonus(value, ctx=context))
+                value = {freeTokenName: {'count': pawnedTokensCount}}
+                newBonuses.append(FreeTokensBonus(value, ctx=ctx, hasPawned=True))
             bonuses = newBonuses
         preformattedBonuses = self.getPreformattedBonuses(bonuses)
         return self._packBonuses(preformattedBonuses, size, gap, isObtained, obtainedImage, obtainedImageOffset)
@@ -173,12 +203,13 @@ class MainOperationAwardComposer(PersonalMissionsAwardComposer):
         return self._packBonuses(preformattedBonuses, size, gap)
 
     def _getBonuses(self, operation):
+        ctx = {'branch': operation.getBranch()}
         hiddenQuests = self._eventsCache.getHiddenQuests()
         finder = finders.getQuestByTokenAndBonus
-        extrasQuest = finder(hiddenQuests, finders.mainQuestTokenFinder(operation.getID()))
-        baseQuest = finder(hiddenQuests, finders.tokenFinder(finders.PERSONAL_MISSION_TOKEN % operation.getID()))
-        bonuses = baseQuest.getBonuses('dossier')
-        bonuses.extend(extrasQuest.getBonuses())
+        extrasQuest = finder(hiddenQuests, finders.mainQuestTokenFinder(operation))
+        baseQuest = finder(hiddenQuests, finders.tokenFinder(finders.PERSONAL_MISSION_TOKEN % (operation.getCampaignID(), operation.getID())))
+        bonuses = baseQuest.getBonuses('dossier', ctx=ctx)
+        bonuses.extend(extrasQuest.getBonuses(ctx=ctx))
         return bonuses
 
     def _getPreformattedTankwomanBonus(self, operation):
@@ -198,13 +229,15 @@ class AddOperationAwardComposer(PersonalMissionsAwardComposer):
         return self._packBonuses(preformattedBonuses, size, gap)
 
     def _getBonuses(self, operation):
+        ctx = {'branch': operation.getBranch()}
         hiddenQuests = self._eventsCache.getHiddenQuests()
         finder = finders.getQuestByTokenAndBonus
-        baseQuest = finder(hiddenQuests, finders.addQuestTokenFinder(operation.getID()))
-        bonuses = baseQuest.getBonuses()
-        if not operation.getNextOperationID():
-            topBageQuest = finder(hiddenQuests, finders.tokenFinder(finders.PERSONAL_MISSION_BADGES_TOKEN))
-            bonuses.extend(topBageQuest.getBonuses())
+        baseQuest = finder(hiddenQuests, finders.addQuestTokenFinder(operation))
+        bonuses = baseQuest.getBonuses(ctx=ctx)
+        if not operation.getNextOperationIDs():
+            token = finders.PERSONAL_MISSION_BADGES_TOKEN % operation.getCampaignID()
+            topBageQuest = finder(hiddenQuests, finders.tokenFinder(token))
+            bonuses.extend(topBageQuest.getBonuses(ctx=ctx))
         return bonuses
 
 
@@ -234,18 +267,34 @@ class TooltipOperationAwardComposer(MainOperationAwardComposer):
             hiddenQuests = self._eventsCache.getHiddenQuests()
             finder = finders.getQuestByTokenAndBonus
             if not operation.isFullCompleted():
-                extrasQuest = finder(hiddenQuests, finders.addQuestTokenFinder(operation.getID()))
+                extrasQuest = finder(hiddenQuests, finders.addQuestTokenFinder(operation))
                 bonusList.extend(extrasQuest.getBonuses())
         return bonusList
 
     def _getPreformattedTankwomanBonus(self, operation):
         if not operation.isFullCompleted():
             current, total = _getTankwomansCountInOperation(operation)
-            currentStr = text_styles.success(current) if current else text_styles.stats(current)
+            currentStr = text_styles.bonusAppliedText(current) if current else text_styles.stats(current)
             images = dict(((size, RES_ICONS.getBonusIcon(size, 'tankwoman')) for size in AWARDS_SIZES.ALL()))
             return PreformattedBonus(bonusName=self._TANKWOMAN_BONUS, label='%s / %s' % (currentStr, str(total)), images=images, labelFormatter=text_styles.main)
         else:
             return None
+
+
+class TooltipPostponedOperationAwardComposer(TooltipOperationAwardComposer):
+    POSTPONE_PERSONAL_MISSION_TOKEN = 'pm2_t%s_early_access'
+
+    def _getBonuses(self, operation):
+        hiddenQuests = self._eventsCache.getHiddenQuests()
+        awardQuestName = self.POSTPONE_PERSONAL_MISSION_TOKEN % operation.getID()
+        for questID, quest in hiddenQuests.iteritems():
+            if questID == awardQuestName:
+                return quest.getBonuses()
+
+        return []
+
+    def _getPreformattedTankwomanBonus(self, operation):
+        pass
 
 
 class MarathonAwardComposer(CurtailingAwardsComposer):

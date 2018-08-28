@@ -25,6 +25,7 @@ from Event import Event
 from PlayerEvents import g_playerEvents
 from connection_mgr import LOGIN_STATUS, INVALID_TOKEN2_EXPIRED
 _PERIPHERY_DEFAULT_LIFETIME = 15 * ONE_MINUTE
+_LIMIT_LOGIN_COUNT = 5
 _logger = logging.getLogger(__name__)
 
 class Manager(ILoginManager):
@@ -106,11 +107,15 @@ class Manager(ILoginManager):
         return self.__servers
 
     def _onLoggedOn(self, responseData):
-        if self.wgcAvailable and self.__wgcManager.onLoggedOn(responseData):
-            return
         name = responseData.get('name', 'UNKNOWN')
         token2 = responseData.get('token2', '')
         self.lobbyContext.setCredentials(name, token2)
+        if self.wgcAvailable and self.__wgcManager.onLoggedOn(responseData):
+            self._preferences.clear()
+            self._preferences.writeLoginInfo()
+            return
+        loginCount = self._preferences.get('loginCount', 0)
+        self._preferences['loginCount'] = 1 if loginCount >= _LIMIT_LOGIN_COUNT else loginCount + 1
         if self._preferences['remember_user']:
             self._preferences['name'] = name
             self._preferences['token2'] = token2
@@ -189,15 +194,20 @@ class Manager(ILoginManager):
         else:
             _logger.warning('Try to removeOnWgcErrorListener while WGC is not available')
 
-    def tryWgcLogin(self):
+    def tryWgcLogin(self, serverName=None):
         if not self.wgcAvailable:
             _logger.warning('WGC is not available, no possibility to login via it, so return')
             return
-        selectedServer = self.__servers.selectedServer
-        if not selectedServer:
-            _logger.warning('No server was selected when WGC connect happened, so return')
-        hostName = self._getHost(CONNECTION_METHOD.TOKEN, selectedServer['data'])
-        self.__wgcManager.login(hostName)
+        else:
+            if serverName is None:
+                selectedServer = self.__servers.selectedServer
+                if not selectedServer:
+                    _logger.warning('No server was selected when WGC connect happened, so return')
+                    return
+                serverName = selectedServer['data']
+            hostName = self._getHost(CONNECTION_METHOD.TOKEN, serverName)
+            self.__wgcManager.login(hostName)
+            return
 
     def checkWgcAvailability(self):
         return self.__tryInitWgcManager() if self.__wgcManager is None else self.__wgcManager.checkWgcAvailability()

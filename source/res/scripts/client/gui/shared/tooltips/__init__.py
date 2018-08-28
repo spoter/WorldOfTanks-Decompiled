@@ -16,6 +16,7 @@ from skeletons.gui.shared import IItemsCache
 class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE = 'vehicle'
     TANKMAN = 'tankman'
+    NOT_RECRUITED_TANKMAN = 'notRecruitedTankman'
     SKILL = 'skill'
     ACHIEVEMENT = 'achievement'
     ACHIEVEMENT_ATTR = 'achievementAttr'
@@ -98,6 +99,8 @@ class ToolTipBaseData(object):
         super(ToolTipBaseData, self).__init__()
         self._context = context
         self._toolTipType = toolTipType
+        self.calledBy = None
+        return
 
     @sf_lobby
     def app(self):
